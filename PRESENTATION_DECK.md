@@ -1,8 +1,12 @@
 # 🧵 Dhaga & Co. CX Copilot & Autonomous Triage MVP
 ## Executive Presentation Deck & Pitch Script (Mini Project 1)
 **Stakeholders:** Arpita (Head of CX), Dev (CTO), Ritu (CEO), Faizan (Supply Chain), Neha (Merchandising)  
-**Target Duration:** 10–12 Minutes + Q&A  
-**Format:** Interactive Presentation Deck (Available live in the Streamlit app under *'📽️ Executive Pitch & Presentation Deck'*)
+**Target Duration:** 10–12 Minutes + Live Demo  
+**Presentation Flow & Speaker Responsibilities:**
+* **Speaker 1 (Teammate 1) — Context, Cross-Functional Bleed & Architecture:** Slides 1 to 4
+* **Speaker 2 (Teammate 2) — Unexpected Edge Cases, Monday Morning Rollout & Strategic Roadmap:** Slides 5 to 8
+* **Speaker 3 (Myself / Lead Developer) — End-to-End Live Application Demonstration:** Agent Workbench, WhatsApp Simulator, and Intentional Failure Audit
+**Format:** Authentic 16:9 Widescreen Presentation Deck (Available live in the Streamlit app under *'📽️ Executive Pitch & Presentation Deck'*)
 
 ---
 
@@ -157,5 +161,43 @@ The system is pre-seeded with 11 realistic edge cases covering all stakeholder n
 3. **Agent Productivity:** 20 FTEs redirected from copy-pasting to high-value customer retention.
 4. **Structured Categorization:** 100% of return reasons structured (Fit Too Tight, Fabric, Stitching) directly solving Category Head Neha's data blindspot.
 
-### 🎙️ Closing Statement
-> *"To summarize: this MVP addresses Arpita's 9-hour backlog, saves ₹5 Lakhs a month in human labor, protects Faizan from COD delivery refusals, gives Neha structured return categorization, and costs CTO Dev under ₹4,000 a month to run with zero ML complexity. The system is live, tested, and ready for deployment. Thank you, and we welcome your questions."*
+### 🎙️ Speaker 2 Transition Statement
+> *"To summarize where we stand today: this MVP slashes Arpita's 9-hour backlog to 18 seconds, saves ₹5 Lakhs a month in human labor, protects Faizan from COD delivery refusals, gives Neha structured return intelligence, and costs CTO Dev under ₹4,000 a month with zero ML complexity. But this is just Phase 1. Let's look at the strategic way forward."*
+
+---
+
+## Slide 8: The Way Forward — Future Scope & Iteration Roadmap
+
+### 📌 Slide Content
+We have mapped out a high-ROI 3-phase roadmap to expand Dhaga & Co.'s AI capabilities across customer touchpoints:
+
+| Strategic Pillar | Target Capability & Architecture | Business & Operational Impact |
+| :--- | :--- | :--- |
+| **Phase 2.1: Multimodal Vision for Returns** | Ingest garment photo uploads on WhatsApp. Gemini 2.5 Flash Vision evaluates seam tears, discoloration, and tag integrity against SKU catalog images. | Eliminates manual agent inspection of return photos; provides Category Head Neha an automated photographic defect audit log. |
+| **Phase 2.2: Proactive Pre-RTO Logistics Watchdog** | Ingest real-time Delhivery & BlueDart Non-Delivery Report (NDR) webhooks every 2 hours. Autonomously sends Hinglish address confirmation WhatsApp nudges before Attempt 2. | Slashes Faizan's 26% COD RTO down to <15%, directly saving ₹7.5 Lakhs every single week in burned logistics. |
+| **Phase 2.3: Regional Voice Notes & Audio IVR** | Ingest WhatsApp voice notes in colloquial Hindi, Marathi, and Bhojpuri using Gemini Multimodal Audio transcription and intent extraction. | Extends accessible support to non-typing Tier-2/3 female shoppers, capturing 42% of voice inquiries into the same 4-stage pipeline. |
+| **Phase 3.0: Return-to-Exchange Revenue Recapture** | When a return is initiated for "Size Too Tight", Copilot automatically offers an instant 1-click swap for the next size up or alternate kurti before issuing a refund. | Preserves gross margin on Dhaga's ₹80 Crore ARR by converting 35% of cash refunds into inventory exchanges. |
+
+### 🎙️ Speaker 2 Closing & Hand-off to Speaker 3 (Live Application Demo):
+> *"And finally, where does Dhaga & Co.'s CX Copilot go from here? We have structured a high-ROI roadmap across four strategic initiatives. First, Multimodal Vision AI: instead of agents manually inspecting photos of torn kurtis, Gemini Flash Vision will autonomously verify fabric defects, matching against the item SKU with visual audit logs. Second, Proactive Pre-RTO Logistics Rescue: by ingesting courier NDR webhooks, we proactively message customers when delivery fails on Attempt 1, slashing Faizan's ₹15 Lakh weekly RTO burn in half. Third, regional Hinglish voice note triage for Tier-3 shoppers in Hindi, Marathi, and Bhojpuri. And fourth, an automated Return-to-Exchange engine that recommends instant 1-click size swaps rather than cash refunds, directly protecting our gross merchandise margin.*
+>
+> *With that, I will hand over the floor to [My Name / Speaker 3] to guide you through the live system demonstration across the Agent Workbench and WhatsApp Simulator."*
+
+---
+
+## Live System Demonstration Guide (Speaker 3 / Lead Developer)
+
+### 📌 Live Demonstration Sequence:
+1. **Frontline Agent Workbench (`TCK-1001` - Pooja Sharma):**
+   * Demonstrate the 18-second autonomous response with live Delhivery tracking link and Patna Hub status.
+   * Highlight the **Deterministic Policy Audit** card proving date math was computed in Python, not LLM tokens.
+2. **Deterministic Return Verification (`TCK-1003` vs. `TCK-1008`):**
+   * Show `TCK-1003` (Delivered 2 days ago) → 1-click approval pre-drafted.
+   * Show `TCK-1008` (Delivered 16 days ago) → Automated polite policy refusal with zero human intervention.
+3. **Intentional Failure Safeguard (`TCK-1007` - Simran Kaur):**
+   * Demonstrate customer with 2 active concurrent orders writing *"Mera parcel nahi aaya refund do"*.
+   * Show the system refusing to hallucinate an order, flagging `AMBIGUOUS_ORDER_REFERENCE`, and drafting a safe clarifying prompt.
+4. **Safety Escalation (`TCK-1006` - Kavita Yadav):**
+   * Show hostile COD dispute and delivery boy misconduct complaint automatically blocked from AI auto-reply and routed directly to Arpita.
+5. **Customer WhatsApp Simulator:**
+   * Type live colloquial Hinglish input and show real-time auto-dispatch in 18 seconds.
