@@ -701,22 +701,54 @@ st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
 # TAB RENDERERS (MODULAR VIEW COMPONENTS)
 # ==============================================================================
 
-def render_agent_workbench(tickets):
-    # Filter Row
-    status_filter = st.radio(
-        "Filter Inbound Tickets:",
-        ["All Tickets", "Auto-Dispatched", "Needs Agent Review", "Escalations"],
-        horizontal=True,
-        key="workbench_status_filter"
-    )
-
-    filtered_tickets = tickets
-    if status_filter == "Auto-Dispatched":
-        filtered_tickets = [t for t in tickets if t.get('ticket_status') in ['AUTO_RESOLVED'] or t.get('dispatch_mode') == 'AUTO_DISPATCH']
-    elif status_filter == "Needs Agent Review":
-        filtered_tickets = [t for t in tickets if t.get('ticket_status') in ['PENDING_AGENT_REVIEW', 'AGENT_RESOLVED']]
-    elif status_filter == "Escalations":
-        filtered_tickets = [t for t in tickets if t.get('ticket_status') == 'ESCALATED' or t.get('predicted_intent') == 'ESCALATION_HOSTILE']
+def render_agent_workbench(tickets, role_mode="agent"):
+    # Filter Row based on operating persona
+    if role_mode == "agent":
+        status_filter = st.radio(
+            "Filter My Queue:",
+            ["Actionable (Needs My Review)", "Auto-Dispatched (Info Only)", "All My Tickets"],
+            horizontal=True,
+            key="wb_status_filter_agent"
+        )
+        if status_filter == "Actionable (Needs My Review)":
+            filtered_tickets = [t for t in tickets if t.get('ticket_status') in ['PENDING_AGENT_REVIEW', 'AGENT_RESOLVED']]
+        elif status_filter == "Auto-Dispatched (Info Only)":
+            filtered_tickets = [t for t in tickets if t.get('ticket_status') in ['AUTO_RESOLVED'] or t.get('dispatch_mode') == 'AUTO_DISPATCH']
+        else:
+            # Frontline agents do not manage P1 escalations
+            filtered_tickets = [t for t in tickets if t.get('ticket_status') != 'ESCALATED']
+            
+    elif role_mode == "lead": # Arpita (Head of CX)
+        status_filter = st.radio(
+            "Leadership & Supervision Filter:",
+            ["🚨 P1 Escalations (Immediate Action)", "⏳ Needs Agent Review", "✅ Auto-Dispatched", "All Tickets"],
+            horizontal=True,
+            key="wb_status_filter_lead"
+        )
+        if status_filter == "🚨 P1 Escalations (Immediate Action)":
+            filtered_tickets = [t for t in tickets if t.get('ticket_status') == 'ESCALATED' or t.get('predicted_intent') == 'ESCALATION_HOSTILE']
+        elif status_filter == "⏳ Needs Agent Review":
+            filtered_tickets = [t for t in tickets if t.get('ticket_status') in ['PENDING_AGENT_REVIEW', 'AGENT_RESOLVED']]
+        elif status_filter == "✅ Auto-Dispatched":
+            filtered_tickets = [t for t in tickets if t.get('ticket_status') in ['AUTO_RESOLVED'] or t.get('dispatch_mode') == 'AUTO_DISPATCH']
+        else:
+            filtered_tickets = tickets
+            
+    else: # All-access / Presentation mode
+        status_filter = st.radio(
+            "Filter Inbound Tickets:",
+            ["All Tickets", "Auto-Dispatched", "Needs Agent Review", "Escalations"],
+            horizontal=True,
+            key="wb_status_filter_all"
+        )
+        if status_filter == "Auto-Dispatched":
+            filtered_tickets = [t for t in tickets if t.get('ticket_status') in ['AUTO_RESOLVED'] or t.get('dispatch_mode') == 'AUTO_DISPATCH']
+        elif status_filter == "Needs Agent Review":
+            filtered_tickets = [t for t in tickets if t.get('ticket_status') in ['PENDING_AGENT_REVIEW', 'AGENT_RESOLVED']]
+        elif status_filter == "Escalations":
+            filtered_tickets = [t for t in tickets if t.get('ticket_status') == 'ESCALATED' or t.get('predicted_intent') == 'ESCALATION_HOSTILE']
+        else:
+            filtered_tickets = tickets
 
     if not filtered_tickets:
         st.info(f"No tickets currently in the '{status_filter}' category.")
@@ -915,14 +947,17 @@ def render_agent_workbench(tickets):
             elif sel.get('ticket_status') == 'ESCALATED':
                 st.error("🚨 **P1 Escalated to Senior CX Lead (Arpita)**")
                 st.markdown("*Reason: Hostile complaint / RTO dispute / threat of legal action. AI auto-reply was strictly prohibited.*")
-                act_col1, act_col2 = st.columns(2)
-                with act_col1:
-                    if st.button("📞 Assign to Priority Callback", key=f"call_{curr_t_id}", use_container_width=True):
-                        st.toast("Assigned to Senior Escalations Team!", icon="🚀")
-                with act_col2:
-                    if st.button("✓ Mark De-escalated", key=f"deesc_{curr_t_id}", use_container_width=True):
-                        database.update_agent_review(curr_t_id, "De-escalated via direct phone consultation", agent_id="Arpita_Lead")
-                        st.rerun()
+                if role_mode in ["lead", "all"]:
+                    act_col1, act_col2 = st.columns(2)
+                    with act_col1:
+                        if st.button("📞 Assign to Priority Callback", key=f"call_{curr_t_id}", use_container_width=True):
+                            st.toast("Assigned to Senior Escalations Team!", icon="🚀")
+                    with act_col2:
+                        if st.button("✓ Mark De-escalated", key=f"deesc_{curr_t_id}", use_container_width=True):
+                            database.update_agent_review(curr_t_id, "De-escalated via direct phone consultation", agent_id="Arpita_Lead")
+                            st.rerun()
+                else:
+                    st.info("🔒 **Assigned to Senior CX Leadership (Arpita):** This ticket is under supervisor review. Frontline dispatch is locked.")
 
             else: # PENDING_AGENT_REVIEW
                 is_partial = "PARTIAL" in (sel.get('deterministic_policy_check') or "") or verdict == "PARTIAL_EXCEPTION_REVIEW"
@@ -1141,7 +1176,7 @@ def render_macros_comparison(tickets):
         """, unsafe_allow_html=True)
 
 
-def render_executive_analytics(tickets):
+def render_executive_analytics(tickets, show_dev_cost=False):
     st.markdown("### 📊 Dhaga & Co. Executive Impact Dashboard")
     st.caption("Addressing Ritu (CEO), Sameer (Growth), and Faizan (Supply Chain) with concrete numbers.")
     
@@ -1167,17 +1202,30 @@ def render_executive_analytics(tickets):
         st.dataframe(frt_df, hide_index=True, use_container_width=True)
 
     with m_col2:
-        st.markdown("#### 3. CTO Dev's Cost Arithmetic Line")
-        st.markdown("""
-        | Item | Calculation | Weekly Total | Monthly Total |
-        | :--- | :--- | :--- | :--- |
-        | **Inbound Tickets** | Case Brief Baseline | 9,000 tickets | 39,000 tickets |
-        | **Avg Tokens / Ticket** | 1,200 In / 250 Out | 13.0M Tokens | 56.5M Tokens |
-        | **Blended LLM Cost** | ₹0.096 / ticket | **₹864 / week** | **₹3,744 / month** |
-        | **Manual Labor Saved** | ~20 FTE Agents | **₹1,25,000 / week** | **₹5,00,000 / month** |
-        | **ROI Ratio** | Labor Saved / LLM Cost | **144x Return** | **133x Return** |
-        """)
-        st.success("🎯 **The Financial Defense for Dev (CTO):** For under ₹4,000 per month in LLM tokens, Dhaga & Co. liberates ₹5,00,000/month of human agent capacity.")
+        if show_dev_cost:
+            st.markdown("#### 3. CTO Dev's Cost Arithmetic Line")
+            st.markdown("""
+            | Item | Calculation | Weekly Total | Monthly Total |
+            | :--- | :--- | :--- | :--- |
+            | **Inbound Tickets** | Case Brief Baseline | 9,000 tickets | 39,000 tickets |
+            | **Avg Tokens / Ticket** | 1,200 In / 250 Out | 13.0M Tokens | 56.5M Tokens |
+            | **Blended LLM Cost** | ₹0.096 / ticket | **₹864 / week** | **₹3,744 / month** |
+            | **Manual Labor Saved** | ~20 FTE Agents | **₹1,25,000 / week** | **₹5,00,000 / month** |
+            | **ROI Ratio** | Labor Saved / LLM Cost | **144x Return** | **133x Return** |
+            """)
+            st.success("🎯 **The Financial Defense for Dev (CTO):** For under ₹4,000 per month in LLM tokens, Dhaga & Co. liberates ₹5,00,000/month of human agent capacity.")
+        else:
+            st.markdown("#### 3. Support Team Capacity & Agent Shift Efficiency")
+            st.markdown("""
+            | Operational Area | Baseline Operation | With CX Copilot |
+            | :--- | :--- | :--- |
+            | **Active Support Staff** | 34 Agents on Freshdesk | **14 Agents on High-Touch Cases** |
+            | **Repetitive Macro Copiers** | 20 FTEs copying 4 macros | **0 Agents typing macros (100% deflected)** |
+            | **Weekly Capacity Liberated** | 0 Hours | **~800+ Agent Hours / Week Reclaimed** |
+            | **End-of-Day Backlog** | 9-Hour Queued Tickets | **Zero Backlog (Sub-30s Triage)** |
+            | **Monthly Payroll Salvaged** | Burned on WISMO | **₹5,00,000 / Month Reallocated** |
+            """)
+            st.success("🎯 **CX Leadership Impact:** 20 full-time support agents freed from repetitive copy-pasting to handle VIP sizing consults and proactive customer retention.")
 
         st.markdown("#### 4. Neha's Return Reason Categorization")
         st.caption("Neha: *'44% of returns land in Other... most is fit, but I can only read a few hundred.'*")
@@ -1252,6 +1300,36 @@ def render_technical_architecture(tickets):
             - Execution Time: `{inspect_t.get('execution_time_ms')}ms`
             - Token Cost: `₹{inspect_t.get('cost_inr')}`
             """)
+
+
+def render_cto_cost_model(tickets):
+    st.markdown("### 💰 CTO Financial Defense & Token Arithmetic")
+    st.caption("Dedicated for Dev (CTO) & Finance: Token footprint, blended unit pricing, and financial ROI against 9,000 weekly tickets.")
+    
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("#### 1. Per-Ticket Token Footprint & Unit Economics")
+        token_df = pd.DataFrame({
+            "Pipeline Step": ["Step 1: Router & Extractor", "Step 2: Database & Policy Math", "Step 3: Response Drafter", "Step 4: Evaluator-Optimizer", "Total Blended Run"],
+            "Engine / Model": ["Gemini 2.5 Flash", "Deterministic Python (SQL)", "Gemini 2.5 Flash", "Gemini 2.5 Pro", "Dual Model + Python"],
+            "Token Consumption": ["380 In / 85 Out", "0 Tokens (Pure Code)", "450 In / 130 Out", "520 In / 60 Out", "1,350 In / 275 Out"],
+            "Unit Cost (INR)": ["₹0.035", "₹0.000", "₹0.048", "₹0.013", "₹0.096 / run"]
+        })
+        st.dataframe(token_df, hide_index=True, use_container_width=True)
+        st.caption("At ₹86.5/USD exchange rate. Flash input: $0.075/1M, Pro input: $1.25/1M.")
+
+    with c2:
+        st.markdown("#### 2. Weekly & Monthly Financial Defense")
+        st.markdown("""
+        | Item | Calculation | Weekly Total | Monthly Total |
+        | :--- | :--- | :--- | :--- |
+        | **Inbound Tickets** | Case Brief Baseline | 9,000 tickets | 39,000 tickets |
+        | **Avg Tokens / Ticket** | 1,350 In / 275 Out | 14.6M Tokens | 63.3M Tokens |
+        | **Blended LLM Cost** | ₹0.096 / ticket | **₹864 / week (~$10)** | **₹3,744 / month** |
+        | **Manual Labor Saved** | ~20 FTE Agents | **₹1,25,000 / week** | **₹5,00,000 / month** |
+        | **Net Financial ROI** | Labor Saved / LLM Cost | **144x Return** | **133x Return** |
+        """)
+        st.success("🎯 **CTO Arithmetic Summary:** For less than ₹4,000 per month in LLM API spend, Dhaga & Co. liberates ₹5,00,000/month of human labor with zero infrastructure maintenance.")
 
 
 def render_pitch_deck(tickets):
@@ -1332,52 +1410,52 @@ if show_all_tabs:
         "🛡️ Code vs Model & System Audit",
         "📽️ Executive Pitch & Presentation Deck"
     ])
-    with t1: render_agent_workbench(tickets)
+    with t1: render_agent_workbench(tickets, role_mode="all")
     with t2: render_whatsapp_simulator()
     with t3: render_macros_comparison(tickets)
-    with t4: render_executive_analytics(tickets)
+    with t4: render_executive_analytics(tickets, show_dev_cost=True)
     with t5: render_technical_architecture(tickets)
     with t6: render_pitch_deck(tickets)
 
 elif "Frontline Support Agent" in user_role:
-    # Strictly Agent Tabs
+    # Strictly Agent Tabs: Focused only on actionable triage, simulator, and macros
     t1, t2, t3 = st.tabs([
         "🎧 My Triage Workbench",
         "📱 Customer WhatsApp Simulator",
         "💬 Canned Macros vs AI Copilot"
     ])
-    with t1: render_agent_workbench(tickets)
+    with t1: render_agent_workbench(tickets, role_mode="agent")
     with t2: render_whatsapp_simulator()
     with t3: render_macros_comparison(tickets)
 
 elif "Arpita" in user_role:
-    # Strictly Head of CX Tabs
+    # Strictly Head of CX Tabs: Leadership Analytics (No Dev Cost), P1 Escalations Supervision, WhatsApp Experience, Pitch Deck
     t1, t2, t3, t4 = st.tabs([
         "📊 CX Operations & Service Leadership",
-        "🎧 Live Queue & Escalation Supervision",
-        "📱 Customer WhatsApp Simulator",
+        "🚨 P1 Escalations & Supervision Queue",
+        "📱 Customer WhatsApp Experience",
         "📽️ Pitch Deck & Executive Summary"
     ])
-    with t1: render_executive_analytics(tickets)
-    with t2: render_agent_workbench(tickets)
+    with t1: render_executive_analytics(tickets, show_dev_cost=False)
+    with t2: render_agent_workbench(tickets, role_mode="lead")
     with t3: render_whatsapp_simulator()
     with t4: render_pitch_deck(tickets)
 
 elif "Dev" in user_role:
-    # Strictly CTO & Architecture Tabs
+    # Strictly CTO & Architecture Tabs: System Audit, Token Arithmetic & Cost Model, Prompt Testbed, Pitch Deck (Zero agent escalation queues)
     t1, t2, t3, t4 = st.tabs([
         "🛡️ Code vs Model & System Audit",
         "💰 CTO Cost Arithmetic & Financial Model",
-        "🎧 Live Telemetry Queue & Sandbox",
+        "📱 Model Prompt & WhatsApp Testbed",
         "📽️ Pitch Deck & Executive Summary"
     ])
     with t1: render_technical_architecture(tickets)
-    with t2: render_executive_analytics(tickets)
-    with t3: render_agent_workbench(tickets)
+    with t2: render_cto_cost_model(tickets)
+    with t3: render_whatsapp_simulator()
     with t4: render_pitch_deck(tickets)
 
 else: # Pitch Deck Mode
-    # Presentation Mode is Front & Center
+    # Presentation Mode is Front & Center with all live demo inspection tabs
     t1, t2, t3, t4, t5 = st.tabs([
         "📽️ Executive Pitch & Architecture Deck",
         "🎧 Live Agent Workbench Demo",
@@ -1386,7 +1464,7 @@ else: # Pitch Deck Mode
         "🛡️ Technical Architecture Audit"
     ])
     with t1: render_pitch_deck(tickets)
-    with t2: render_agent_workbench(tickets)
+    with t2: render_agent_workbench(tickets, role_mode="all")
     with t3: render_whatsapp_simulator()
-    with t4: render_executive_analytics(tickets)
+    with t4: render_executive_analytics(tickets, show_dev_cost=True)
     with t5: render_technical_architecture(tickets)
