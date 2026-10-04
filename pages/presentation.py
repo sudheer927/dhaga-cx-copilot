@@ -42,6 +42,12 @@ if os.path.exists(html_path):
     with open(html_path, "r", encoding="utf-8") as f:
         presentation_html = f.read()
     
+    top_c1, top_c2 = st.columns([3, 7])
+    with top_c1:
+        st.page_link("app.py", label="← Return to Workbench & Live App", icon="🎧")
+    with top_c2:
+        st.caption("Press F5 or '▶ Start Slide Show' for fullscreen PowerPoint experience")
+        
     st.components.v1.html(presentation_html, height=920, scrolling=False)
 else:
     st.error("Presentation file not found at presentation/index.html")

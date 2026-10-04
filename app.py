@@ -339,6 +339,46 @@ if audit_count == 0:
     pipeline.run_batch_triage()
 
 # ==============================================================================
+# VIEW ROUTING & PRESENTATION FULLSCREEN HANDLING
+# ==============================================================================
+# Automatic view routing based on query params or URL
+requested_view = st.query_params.get("view") or st.query_params.get("page")
+if requested_view in ["presentation", "deck", "pitch"]:
+    st.session_state["user_role_choice"] = "📽️ Executive Pitch & Presentation Deck"
+    st.session_state["deck_fullscreen"] = True
+
+# Client-side detection: If browser pathname contains 'presentation', sync query param
+st.markdown("""
+<script>
+    if (window.location.pathname.indexOf('presentation') !== -1 && window.location.search.indexOf('view=presentation') === -1) {
+        const u = new URL(window.location);
+        u.searchParams.set('view', 'presentation');
+        window.location.replace(u.toString());
+    }
+</script>
+""", unsafe_allow_html=True)
+
+# If in fullscreen presentation deck mode, hide sidebar & headers for complete immersion
+if st.session_state.get("deck_fullscreen"):
+    st.markdown("""
+    <style>
+        section[data-testid="stSidebar"] {
+            display: none !important;
+        }
+        header[data-testid="stHeader"] {
+            display: none !important;
+        }
+        .main .block-container {
+            padding-top: 0.5rem !important;
+            padding-bottom: 1rem !important;
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+            max-width: 100% !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+# ==============================================================================
 # SIDEBAR CONTROLS & DYNAMIC ROLE SWITCHER
 # ==============================================================================
 with st.sidebar:
@@ -1127,20 +1167,28 @@ def render_technical_architecture(tickets):
 
 
 def render_pitch_deck(tickets):
-    # Action Header
+    is_fs = st.session_state.get("deck_fullscreen", False)
     p_col1, p_col2 = st.columns([7, 3])
     with p_col1:
         st.markdown("### 📽️ Dhaga & Co. CX Copilot — Executive Pitch Deck")
         st.caption("Authentic 16:9 Widescreen slide deck. Navigate via the thumbnail strip on the left, arrow keys, or controls below.")
     with p_col2:
-        st.link_button("⛶ Open Fullscreen Deck (/presentation)", "/presentation", type="primary", use_container_width=True)
+        if not is_fs:
+            if st.button("⛶ Immersive Fullscreen Mode", type="primary", use_container_width=True, key="enter_fs_deck"):
+                st.session_state["deck_fullscreen"] = True
+                st.rerun()
+        else:
+            if st.button("✕ Exit Fullscreen Mode", type="secondary", use_container_width=True, key="exit_fs_deck"):
+                st.session_state["deck_fullscreen"] = False
+                st.rerun()
 
     # Embed the authentic 16:9 PowerPoint slide engine
     html_path = os.path.join(os.path.dirname(__file__), "presentation", "index.html")
     if os.path.exists(html_path):
         with open(html_path, "r", encoding="utf-8") as f:
             ppt_html = f.read()
-        st.components.v1.html(ppt_html, height=870, scrolling=False)
+        iframe_height = 920 if is_fs else 870
+        st.components.v1.html(ppt_html, height=iframe_height, scrolling=False)
     else:
         st.error("Presentation file not found at presentation/index.html")
 

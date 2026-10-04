@@ -609,7 +609,7 @@
             <button class="ppt-btn primary" onclick="togglePresentationMode()">
                 ▶ Start Slide Show <kbd>F5 / F</kbd>
             </button>
-            <a href="http://localhost:8501" target="_blank" class="ppt-btn" style="background:#0284C7; color:#FFFFFF; border-color:#38BDF8;">
+            <a href="javascript:void(0)" onclick="try { if(window.parent && window.parent.location) { window.parent.location.href = window.parent.location.origin; } else { window.location.href = '/'; } } catch(e) { window.location.href = '/'; }" class="ppt-btn" style="background:#0284C7; color:#FFFFFF; border-color:#38BDF8;">
                 🚀 Open Live App ↗
             </a>
         </div>
@@ -1087,13 +1087,30 @@
 
         function togglePresentationMode() {
             document.body.classList.toggle('fullscreen-mode');
-            if (document.body.classList.contains('fullscreen-mode')) {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(() => {});
+            const isFull = document.body.classList.contains('fullscreen-mode');
+            if (isFull) {
+                try {
+                    if (window.parent && window.parent.document && window.parent.document.documentElement.requestFullscreen) {
+                        window.parent.document.documentElement.requestFullscreen().catch(() => {});
+                    } else if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen().catch(() => {});
+                    }
+                } catch(e) {
+                    if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen().catch(() => {});
+                    }
                 }
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen().catch(() => {});
+                try {
+                    if (window.parent && window.parent.document && window.parent.document.exitFullscreen) {
+                        window.parent.document.exitFullscreen().catch(() => {});
+                    } else if (document.exitFullscreen) {
+                        document.exitFullscreen().catch(() => {});
+                    }
+                } catch(e) {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen().catch(() => {});
+                    }
                 }
             }
         }
