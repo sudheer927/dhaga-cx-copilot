@@ -304,22 +304,36 @@ def update_agent_review(ticket_id: str, approved_response: str, agent_id: str = 
     conn.commit()
     conn.close()
 
+def escalate_ticket(ticket_id: str, reason: str = "Escalated by Agent to Senior Lead"):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE ticket_triage_audit 
+        SET dispatch_mode = 'SUPERVISOR_ESCALATE', evaluator_reasoning = ?
+        WHERE ticket_id = ?
+    """, (reason, ticket_id))
+    cursor.execute("UPDATE support_tickets SET ticket_status = 'ESCALATED' WHERE ticket_id = ?", (ticket_id,))
+    conn.commit()
+    conn.close()
+
 def get_all_tickets_view():
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
         SELECT 
             t.ticket_id, t.source, t.customer_phone, t.raw_message, t.created_at, t.ticket_status,
-            a.matched_order_id, a.predicted_intent, a.sentiment, a.router_confidence,
-            a.deterministic_policy_check, a.generated_draft, a.evaluator_passed,
+            a.matched_order_id, a.predicted_intent, a.sentiment, a.extracted_entities, a.router_confidence,
+            a.deterministic_policy_check, a.order_lookup_success, a.generated_draft, a.evaluator_passed,
             a.evaluator_score, a.evaluator_reasoning, a.dispatch_mode, a.final_response_sent,
-            a.cost_inr, a.execution_time_ms,
-            o.product_name, o.order_status, o.expected_delivery_date, o.courier_partner, o.awb_number,
+            a.agent_id, a.agent_modified_draft, a.model_router_name, a.model_evaluator_name,
+            a.input_tokens, a.output_tokens, a.cost_inr, a.execution_time_ms,
+            o.product_name, o.product_category, o.total_amount, o.payment_mode, o.order_status,
+            o.expected_delivery_date, o.courier_partner, o.awb_number, o.delivered_date, o.order_date,
             c.full_name, c.city, c.tier
         FROM support_tickets t
         LEFT JOIN ticket_triage_audit a ON t.ticket_id = a.ticket_id
         LEFT JOIN orders o ON a.matched_order_id = o.order_id
-        LEFT JOIN customers c ON o.customer_id = c.customer_id
+        LEFT JOIN customers c ON (o.customer_id = c.customer_id OR t.customer_phone = c.phone_number)
         ORDER BY t.ticket_id ASC
     """)
     rows = [dict(r) for r in cursor.fetchall()]

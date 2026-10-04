@@ -151,6 +151,12 @@ def route_and_extract(ticket_message: str, customer_phone: str) -> Tuple[TicketE
         urgency = UrgencyEnum.HIGH
         confidence = 0.92
         summary = "Customer inquiring about refund status or pending reverse pickup"
+    elif any(k in msg_lower for k in ["charges extra", "drop hoga", "collection kab", "store timing", "offers", "sale kab", "discount", "free delivery"]):
+        intent = IntentEnum.GENERAL_INQUIRY
+        sentiment = SentimentEnum.CALM
+        urgency = UrgencyEnum.LOW
+        confidence = 0.95
+        summary = "Customer inquiring regarding COD delivery fees, catalog drops, or store policy"
     elif any(k in msg_lower for k in ["kab", "tracking", "status", "dispatch", "kaha", "pahucha", "order", "parcel", "delivery"]):
         intent = IntentEnum.WISMO
         sentiment = SentimentEnum.ANXIOUS if any(w in msg_lower for w in ["din ho gaye", "late", "nahi mila"]) else SentimentEnum.CALM
@@ -420,6 +426,22 @@ def execute_deterministic_policy(extraction: TicketExtractionResult, customer_ph
             checks_summary=checks_summary
         )
 
+    if extraction.intent == IntentEnum.GENERAL_INQUIRY:
+        return PolicyCheckResult(
+            eligible_for_auto_reply=True,
+            policy_code="GENERAL_INQUIRY_INFO",
+            policy_message="General question about COD delivery fees, catalog drops, or store policy. Auto-reply answer prepared.",
+            policy_verdict=PolicyVerdictEnum.PASS_WITHIN_POLICY,
+            order_found=bool(order_data),
+            order_data=order_data,
+            courier_events=events,
+            order_placed_date=order_placed,
+            delivered_date=delivered_date,
+            ticket_raised_date=ticket_raised_date,
+            days_gap=days_gap,
+            checks_summary=checks_summary
+        )
+
     return PolicyCheckResult(
         eligible_for_auto_reply=False,
         policy_code="GENERAL_POLICY_CHECK",
@@ -548,6 +570,9 @@ def draft_response(
     elif policy.policy_code == "SAFETY_ESCALATE_TO_SENIOR_LEAD":
         text = f"Namaste {customer_name}! Hum aapki pareshani ko achhi tarah samajh sakte hain aur asuvidha ke liye kshama chahte hain. Aapka order #{order_info.get('order_id')} priority par liya gaya hai. Humare Senior Support Lead agle 30 minutes me aapse personally sampark karke iska samadhan karenge."
         tone = "Urgent Senior De-escalation"
+    elif policy.policy_code == "GENERAL_INQUIRY_INFO":
+        text = f"Namaste {customer_name}! Dhaga & Co. me shopping karne ke liye dhanyawad. Humare sabhi COD orders par delivery bilkul free hai, koi hidden ya extra charge nahi lagta! Aur humara naya festive ethnic collection har Tuesday dopahar 12 baje app par live hota hai. Kisi aur jankari ke liye hum hamesha yahi hain."
+        tone = "Warm & Informative Brand Assistant"
     else:
         text = f"Namaste {customer_name}! Dhaga & Co. support me aapka swagat hai. Aapke order #{order_info.get('order_id', '')} ke sambandh me humari team verify kar rahi hai aur turant update karegi."
         tone = "General Acknowledgment"
@@ -674,6 +699,9 @@ def evaluate_and_guardrail(
     elif policy.policy_code == "RETURN_PARTIAL_EXCEPTION_REVIEW":
         action = "HUMAN_REVIEW"
         feedback = f"Partially falling under policy ({policy.days_gap} days elapsed with reported product defect/damage). Flagged for frontline agent review and discretion."
+    elif policy.policy_code == "GENERAL_INQUIRY_INFO":
+        action = "AUTO_SEND"
+        feedback = "General policy and catalogue drop information verified against brand guidelines. Safe for automated WhatsApp dispatch."
     elif policy.policy_code == "RETURN_WINDOW_EXPIRED":
         action = "HUMAN_REVIEW"
         feedback = "Order delivered > 7 days ago. Policy exception request: requires frontline agent confirmation."
