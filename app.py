@@ -374,6 +374,8 @@ with st.sidebar:
     st.divider()
     st.markdown("**Presentation & Demo Controls:**")
     
+    st.link_button("📽️ Open Fullscreen Slides (/presentation)", "/presentation", use_container_width=True, help="Opens the interactive presentation slide deck webpage")
+
     if st.button("⚠️ Trigger Intentional Failure Demo", use_container_width=True, help="Loads Ticket TCK-1007 (Ambiguous Order without ID)"):
         st.session_state["selected_ticket_id"] = "TCK-1007"
         st.rerun()
