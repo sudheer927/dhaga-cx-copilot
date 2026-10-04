@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhaga & Co. CX Copilot & Autonomous Triage | Executive Pitch Deck</title>
+    <title>Dhaga & Co. CX Copilot | Executive Presentation Slides</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #070B14;
-            --surface-color: #0F172A;
+            --bg-canvas: #090D16;
+            --surface-tool: #0F172A;
+            --surface-slide: #111827;
             --surface-card: #1E293B;
-            --surface-glass: rgba(30, 41, 59, 0.7);
+            --surface-card-hover: #27354A;
             --border-color: #334155;
-            --text-primary: #F8FAFC;
-            --text-secondary: #94A3B8;
+            --border-focus: #38BDF8;
+            --text-main: #F8FAFC;
+            --text-sub: #94A3B8;
             --text-muted: #64748B;
             --accent-blue: #38BDF8;
             --accent-indigo: #818CF8;
@@ -23,9 +25,8 @@
             --accent-amber: #FBBF24;
             --accent-rose: #FB7185;
             --accent-purple: #C084FC;
-            --gradient-primary: linear-gradient(135deg, #38BDF8 0%, #818CF8 50%, #C084FC 100%);
-            --shadow-subtle: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
-            --shadow-glow: 0 0 25px -5px rgba(56, 189, 248, 0.25);
+            --shadow-slide: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.3);
         }
 
         * {
@@ -37,96 +38,80 @@
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            overflow: hidden;
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
             height: 100vh;
             width: 100vw;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
-        /* Ambient glowing background */
-        .ambient-glow {
-            position: fixed;
-            top: -20%;
-            left: -10%;
-            width: 50vw;
-            height: 50vw;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, transparent 70%);
-            filter: blur(80px);
-            z-index: 0;
-            pointer-events: none;
-        }
-        .ambient-glow-2 {
-            position: fixed;
-            bottom: -20%;
-            right: -10%;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(circle, rgba(192, 132, 252, 0.07) 0%, transparent 70%);
-            filter: blur(100px);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Top Header Navigation Bar */
-        header {
-            position: relative;
-            z-index: 10;
-            height: 64px;
-            padding: 0 32px;
+        /* =====================================================================
+           TOP POWERPOINT TOOLBAR & TITLE RIBBON
+           ===================================================================== */
+        .ppt-toolbar {
+            height: 52px;
+            background: var(--surface-tool);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(16px);
+            padding: 0 20px;
+            z-index: 100;
+            flex-shrink: 0;
         }
 
-        .brand-badge {
+        .ppt-title-area {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            font-size: 1.15rem;
-            color: #FFFFFF;
-            letter-spacing: -0.02em;
         }
-        .brand-badge .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--gradient-primary);
-            border-radius: 8px;
+        .ppt-app-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #D97706 0%, #EA580C 100%);
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
-            box-shadow: var(--shadow-glow);
+            font-size: 0.95rem;
+            color: #FFFFFF;
+            font-weight: 800;
+            box-shadow: 0 2px 6px rgba(234, 88, 12, 0.4);
         }
-        .brand-tagline {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-            margin-left: 8px;
-            padding-left: 12px;
-            border-left: 1px solid var(--border-color);
-        }
-
-        .header-actions {
+        .ppt-filename {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #FFFFFF;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 8px;
+        }
+        .ppt-filename span {
+            font-size: 0.72rem;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
         }
 
-        .btn-ctrl {
-            background: rgba(30, 41, 59, 0.8);
-            color: var(--text-primary);
+        .ppt-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ppt-btn {
+            background: var(--surface-card);
+            color: var(--text-main);
             border: 1px solid var(--border-color);
-            padding: 7px 14px;
-            border-radius: 8px;
-            font-size: 0.82rem;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -135,278 +120,432 @@
             gap: 6px;
             text-decoration: none;
         }
-        .btn-ctrl:hover {
-            background: var(--surface-card);
-            border-color: var(--accent-blue);
+        .ppt-btn:hover {
+            background: var(--surface-card-hover);
+            border-color: var(--border-focus);
             color: #FFFFFF;
-            transform: translateY(-1px);
         }
-        .btn-ctrl.primary {
+        .ppt-btn.primary {
             background: linear-gradient(135deg, #0284C7 0%, #2563EB 100%);
             border-color: #38BDF8;
             color: #FFFFFF;
             box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
         }
-        .btn-ctrl.primary:hover {
+        .ppt-btn.primary:hover {
             background: linear-gradient(135deg, #0369A1 0%, #1D4ED8 100%);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.6);
         }
 
-        /* Slide Deck Carousel Viewport */
-        main {
-            position: relative;
-            z-index: 5;
+        /* =====================================================================
+           MAIN PPT WORKSPACE (THUMBNAIL RAIL + SLIDE STAGE)
+           ===================================================================== */
+        .ppt-workspace {
             flex: 1;
+            display: flex;
             overflow: hidden;
+            position: relative;
+        }
+
+        /* Left Slide Thumbnail Rail */
+        .ppt-thumbnail-rail {
+            width: 220px;
+            background: #0B1120;
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        body.fullscreen-mode .ppt-thumbnail-rail {
+            display: none;
+        }
+        body.fullscreen-mode .ppt-toolbar {
+            display: none;
+        }
+        body.fullscreen-mode .ppt-bottom-bar {
+            opacity: 0.2;
+            transition: opacity 0.3s;
+        }
+        body.fullscreen-mode .ppt-bottom-bar:hover {
+            opacity: 1;
+        }
+
+        .thumb-item {
+            cursor: pointer;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .thumb-number {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            width: 16px;
+            text-align: right;
+            margin-top: 4px;
+        }
+        .thumb-card {
+            flex: 1;
+            aspect-ratio: 16 / 9;
+            background: #1E293B;
+            border: 2px solid #334155;
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .thumb-card:hover {
+            border-color: #64748B;
+            transform: scale(1.02);
+        }
+        .thumb-item.active .thumb-card {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+            background: #172554;
+        }
+        .thumb-item.active .thumb-number {
+            color: var(--accent-blue);
+        }
+        .thumb-mini-tag {
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+        }
+        .thumb-mini-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            line-height: 1.2;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        /* Center Slide Stage Area */
+        .ppt-stage {
+            flex: 1;
+            background: radial-gradient(circle at center, #111827 0%, #070B14 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px 40px;
-        }
-
-        .slide-container {
-            width: 100%;
-            max-width: 1240px;
-            height: 100%;
+            padding: 24px;
+            overflow: hidden;
             position: relative;
         }
 
-        .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* =====================================================================
+           THE 16:9 POWERPOINT SLIDE CANVAS
+           ===================================================================== */
+        .ppt-slide-canvas {
             width: 100%;
+            max-width: 1120px;
+            aspect-ratio: 16 / 9;
+            background: var(--surface-slide);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-slide);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 38px 46px;
+            position: relative;
+            overflow: hidden;
+        }
+        body.fullscreen-mode .ppt-slide-canvas {
+            max-width: 95vw;
+            max-height: 90vh;
+        }
+
+        /* Slide Inner Layout Elements */
+        .slide-content-pane {
+            display: none;
+            flex-direction: column;
             height: 100%;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px) scale(0.98);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            justify-content: space-between;
+            animation: slideIn 0.25s ease-out forwards;
+        }
+        .slide-content-pane.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.99) translateY(6px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .slide-header {
+            margin-bottom: 20px;
+        }
+        .slide-badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 8px;
+        }
+        .slide-badge.blue { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); border: 1px solid rgba(56, 189, 248, 0.3); }
+        .slide-badge.red { background: rgba(251, 113, 133, 0.15); color: var(--accent-rose); border: 1px solid rgba(251, 113, 133, 0.3); }
+        .slide-badge.green { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); border: 1px solid rgba(52, 211, 153, 0.3); }
+        .slide-badge.purple { background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); }
+
+        .slide-h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+        .slide-sub {
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        /* Slide Body Layouts */
+        .slide-body {
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            overflow-y: auto;
-            padding: 10px 10px 30px 10px;
         }
 
-        .slide.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-
-        /* Slide Cards & Typography */
-        .slide-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(56, 189, 248, 0.12);
-            color: var(--accent-blue);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 4px 12px;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 12px;
-            width: fit-content;
-        }
-        .slide-tag.red {
-            background: rgba(251, 113, 133, 0.12);
-            color: var(--accent-rose);
-            border-color: rgba(251, 113, 133, 0.3);
-        }
-        .slide-tag.green {
-            background: rgba(52, 211, 153, 0.12);
-            color: var(--accent-emerald);
-            border-color: rgba(52, 211, 153, 0.3);
-        }
-        .slide-tag.purple {
-            background: rgba(192, 132, 252, 0.12);
-            color: var(--accent-purple);
-            border-color: rgba(192, 132, 252, 0.3);
-        }
-
-        .slide-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.3rem;
-            font-weight: 800;
-            color: #FFFFFF;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            margin-bottom: 12px;
-        }
-        .slide-subtitle {
-            font-size: 1.05rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            margin-bottom: 24px;
-            max-width: 900px;
-        }
-
-        /* Glass Cards */
-        .glass-card {
-            background: var(--surface-glass);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: var(--shadow-subtle);
-            backdrop-filter: blur(12px);
-        }
-        .glass-card:hover {
-            border-color: rgba(56, 189, 248, 0.4);
-        }
-
-        .stat-grid-4 {
+        .card-row-4 {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
+            gap: 14px;
         }
-        .stat-box {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 18px;
+        .metric-card-ppt {
+            background: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 16px 14px;
             text-align: center;
-            transition: transform 0.2s;
         }
-        .stat-box:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent-blue);
-        }
-        .stat-value {
+        .metric-val-ppt {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             font-weight: 800;
-            color: #FFFFFF;
             line-height: 1;
             margin-bottom: 6px;
         }
-        .stat-value.blue { color: var(--accent-blue); }
-        .stat-value.red { color: var(--accent-rose); }
-        .stat-value.green { color: var(--accent-emerald); }
-        .stat-value.purple { color: var(--accent-purple); }
-        .stat-value.amber { color: var(--accent-amber); }
-
-        .stat-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-secondary);
+        .metric-lbl-ppt {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-sub);
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        .stat-subtext {
-            font-size: 0.72rem;
+        .metric-sub-ppt {
+            font-size: 0.68rem;
             color: var(--text-muted);
             margin-top: 4px;
         }
 
-        .quote-box {
+        .quote-card-ppt {
             background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
-            border-left: 4px solid var(--accent-blue);
-            border-radius: 12px;
-            padding: 18px 24px;
+            border-left: 5px solid var(--accent-blue);
+            border-radius: 10px;
+            padding: 16px 20px;
             font-style: italic;
-            font-size: 1.05rem;
+            font-size: 1rem;
             line-height: 1.5;
-            color: #E2E8F0;
-            margin-bottom: 20px;
+            color: #F1F5F9;
+            margin-bottom: 16px;
         }
-        .quote-author {
+        .quote-speaker-ppt {
             display: block;
-            margin-top: 8px;
+            margin-top: 6px;
             font-style: normal;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 700;
             color: var(--accent-blue);
         }
 
-        /* Flow and Comparison Grids */
-        .grid-2 {
+        .grid-split-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 18px;
         }
-        .grid-3 {
+        .grid-split-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
+            gap: 14px;
         }
 
-        /* Flow Stage Card */
-        .stage-card {
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
+        .ppt-box {
+            background: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 10px;
             padding: 18px;
-            position: relative;
         }
-        .stage-badge {
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 6px;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-        .stage-title {
-            font-size: 1rem;
-            font-weight: 700;
+        .ppt-box h4 {
+            font-size: 0.92rem;
             color: #FFFFFF;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .stage-desc {
+        .ppt-box ul {
+            padding-left: 18px;
             font-size: 0.82rem;
-            color: var(--text-secondary);
-            line-height: 1.45;
+            color: var(--text-sub);
+            line-height: 1.6;
+        }
+        .ppt-box ul strong {
+            color: #FFFFFF;
         }
 
-        /* Table styles */
-        .custom-table {
+        .ppt-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
-            margin-top: 10px;
+            font-size: 0.8rem;
         }
-        .custom-table th {
+        .ppt-table th {
             text-align: left;
-            padding: 10px 12px;
-            background: rgba(30, 41, 59, 0.6);
-            color: var(--text-secondary);
+            padding: 8px 10px;
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-sub);
             font-weight: 600;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #334155;
         }
-        .custom-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid rgba(51, 65, 85, 0.5);
-            color: var(--text-primary);
-        }
-        .custom-table tr:hover td {
-            background: rgba(30, 41, 59, 0.4);
+        .ppt-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #27354A;
+            color: #F1F5F9;
         }
 
-        /* Speaker Notes Panel (Toggleable) */
-        .notes-panel {
-            position: fixed;
-            bottom: 64px;
-            left: 0;
-            width: 100%;
-            background: #090E17;
-            border-top: 2px solid var(--accent-indigo);
-            padding: 16px 32px;
-            max-height: 160px;
-            overflow-y: auto;
-            z-index: 50;
-            display: none;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+        /* Flow diagram block */
+        .flow-container-ppt {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 14px;
         }
-        .notes-panel.visible {
-            display: block;
+        .flow-step-ppt {
+            background: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+            position: relative;
         }
-        .notes-header {
+        .flow-step-num {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+        .flow-step-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+        }
+        .flow-step-desc {
+            font-size: 0.72rem;
+            color: var(--text-sub);
+            line-height: 1.4;
+        }
+
+        /* Slide Master Footer */
+        .slide-footer-ppt {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 10px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 16px;
+        }
+        .slide-footer-brand {
+            font-weight: 600;
+            color: var(--text-sub);
+        }
+
+        /* =====================================================================
+           BOTTOM PRESENTER CONTROL BAR
+           ===================================================================== */
+        .ppt-bottom-bar {
+            height: 48px;
+            background: var(--surface-tool);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .ppt-bottom-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+        .ppt-slide-counter {
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .ppt-controls-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ppt-ctrl-btn {
+            background: var(--surface-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ppt-ctrl-btn:hover {
+            border-color: var(--accent-blue);
+            background: var(--surface-card-hover);
+        }
+
+        /* Speaker notes drawer */
+        .ppt-notes-drawer {
+            position: fixed;
+            bottom: 48px;
+            left: 0;
+            width: 100%;
+            background: #0B1120;
+            border-top: 2px solid var(--accent-indigo);
+            padding: 16px 28px;
+            max-height: 160px;
+            overflow-y: auto;
+            z-index: 90;
+            display: none;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+        }
+        .ppt-notes-drawer.open {
+            display: block;
+        }
+        .ppt-notes-title {
             font-size: 0.75rem;
             font-weight: 700;
             color: var(--accent-indigo);
@@ -414,460 +553,549 @@
             letter-spacing: 0.05em;
             margin-bottom: 6px;
         }
-        .notes-content {
-            font-size: 0.9rem;
+        .ppt-notes-body {
+            font-size: 0.88rem;
             color: #E2E8F0;
             line-height: 1.5;
         }
 
-        /* Bottom Control Bar */
-        footer {
-            position: relative;
-            z-index: 10;
-            height: 64px;
-            padding: 0 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-top: 1px solid var(--border-color);
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(16px);
-        }
-
-        .slide-indicators {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .indicator-dot {
-            width: 24px;
-            height: 6px;
-            background: var(--surface-card);
-            border-radius: 999px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-        .indicator-dot.active {
-            background: var(--accent-blue);
-            width: 48px;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
-        }
-
-        .nav-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .slide-counter {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-right: 8px;
-        }
-
-        kbd {
-            background: #1E293B;
-            border: 1px solid #475569;
-            border-radius: 4px;
-            padding: 2px 6px;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
+        /* Printable PDF rules */
+        @media print {
+            body {
+                overflow: visible !important;
+                background: #FFFFFF !important;
+                color: #000000 !important;
+            }
+            .ppt-toolbar, .ppt-thumbnail-rail, .ppt-bottom-bar, .ppt-notes-drawer {
+                display: none !important;
+            }
+            .ppt-stage {
+                padding: 0 !important;
+                background: none !important;
+            }
+            .ppt-slide-canvas {
+                page-break-after: always !important;
+                box-shadow: none !important;
+                border: 1px solid #CCCCCC !important;
+                background: #FFFFFF !important;
+                color: #000000 !important;
+                margin-bottom: 40px !important;
+            }
+            .slide-content-pane {
+                display: flex !important;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="ambient-glow"></div>
-    <div class="ambient-glow-2"></div>
 
-    <!-- Header Navigation -->
-    <header>
-        <div class="brand-badge">
-            <div class="logo-icon">🧵</div>
-            <span>Dhaga & Co. CX Copilot</span>
-            <span class="brand-tagline">Mini Project 1 · Pattern-Based Autonomous Triage</span>
+    <!-- TOP POWERPOINT TITLE BAR -->
+    <div class="ppt-toolbar">
+        <div class="ppt-title-area">
+            <div class="ppt-app-icon">P</div>
+            <div class="ppt-filename">
+                Dhaga_CX_Copilot_Executive_Pitch.pptx
+                <span>Mini Project 1</span>
+            </div>
         </div>
 
-        <div class="header-actions">
-            <button class="btn-ctrl" id="notesToggleBtn" onclick="toggleNotes()">
+        <div class="ppt-actions">
+            <button class="ppt-btn" onclick="toggleNotesDrawer()">
                 🎙️ Speaker Notes <kbd>N</kbd>
             </button>
-            <button class="btn-ctrl" onclick="toggleFullScreen()">
-                ⛶ Fullscreen <kbd>F</kbd>
+            <button class="ppt-btn" onclick="window.print()">
+                🖨️ Save as PDF
             </button>
-            <a href="http://localhost:8501" target="_blank" class="btn-ctrl primary">
-                🚀 Launch Live App Demo ↗
+            <button class="ppt-btn primary" onclick="togglePresentationMode()">
+                ▶ Start Slide Show <kbd>F5 / F</kbd>
+            </button>
+            <a href="http://localhost:8501" target="_blank" class="ppt-btn" style="background:#0284C7; color:#FFFFFF; border-color:#38BDF8;">
+                🚀 Open Live App ↗
             </a>
         </div>
-    </header>
+    </div>
 
-    <!-- Slide Deck Viewport -->
-    <main>
-        <div class="slide-container">
+    <!-- MAIN PPT WORKSPACE -->
+    <div class="ppt-workspace">
 
-            <!-- SLIDE 1: TITLE & EXECUTIVE SUMMARY -->
-            <div class="slide active" id="slide-1" data-notes="Good afternoon. Dhaga & Co. has scaled to ₹80 Crore ARR with 700,000 monthly active shoppers in Tier-2/3 India. But our support operations are collapsing under 9,000 weekly tickets. Arpita's 34 Freshdesk agents spend 9 hours on average copy-pasting the same four canned replies. This MVP proves how we can eliminate the 9-hour backlog, automate 72% of tickets in 18 seconds, save ₹5 Lakhs every month, and stay 100% truthful using pure Python and Google Gemini.">
-                <span class="slide-tag">Executive Presentation · Mini Project 1</span>
-                <h1 class="slide-title">Dhaga & Co. CX Copilot & Autonomous Triage MVP</h1>
-                <p class="slide-subtitle">
-                    Transforming a 9-hour support backlog on 9,000 weekly tickets into an 18-second autonomous triage engine 
-                    by coupling <strong>Google Gemini LLMs (for language)</strong> with <strong>Deterministic Python & Postgres (for ground truth)</strong>.
-                </p>
-
-                <div class="stat-grid-4">
-                    <div class="stat-box">
-                        <div class="stat-value blue">9,000</div>
-                        <div class="stat-label">Weekly Inbound Tickets</div>
-                        <div class="stat-subtext">Freshdesk & WhatsApp</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value red">58%</div>
-                        <div class="stat-label">Repetitive WISMO (~5,220/wk)</div>
-                        <div class="stat-subtext">Where is my order?</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value green">18s</div>
-                        <div class="stat-label">First Response Time</div>
-                        <div class="stat-subtext"><del>9.0 Hours</del> Baseline (99.9% faster)</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value purple">133x</div>
-                        <div class="stat-label">Net Operational ROI</div>
-                        <div class="stat-subtext">₹864/wk vs ₹5.0L Saved</div>
-                    </div>
-                </div>
-
-                <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <span style="font-weight:700; color:#FFFFFF;">Target Stakeholders:</span>
-                        <span style="color:var(--text-secondary); margin-left:8px;">Arpita (Head of CX) · Dev (CTO) · Ritu (CEO) · Faizan (Supply Chain) · Neha (Merchandising)</span>
-                    </div>
-                    <span style="color:var(--accent-blue); font-size:0.85rem; font-weight:600;">Press Space or Next to Begin ➔</span>
+        <!-- LEFT SLIDE THUMBNAIL RAIL (POWERPOINT STYLE) -->
+        <div class="ppt-thumbnail-rail" id="thumbRail">
+            <div class="thumb-item active" onclick="jumpToSlide(1)">
+                <span class="thumb-number">1</span>
+                <div class="thumb-card">
+                    <span class="thumb-mini-tag">Overview</span>
+                    <span class="thumb-mini-title">Dhaga & Co. CX Copilot MVP</span>
                 </div>
             </div>
-
-            <!-- SLIDE 2: THE PROBLEM IN CLIENT'S LANGUAGE -->
-            <div class="slide" id="slide-2" data-notes="Here is the problem in Arpita's exact words: 'Fifty-eight percent of tickets are some version of where is my order. My agents copy and paste the same four replies all day. Average first response is nine hours.' 20 out of 34 agents do nothing but copy-paste generic canned replies from a shared Google Document. At ₹25,000 to ₹30,000 per agent, Dhaga spends over ₹60 Lakhs every year on manual typing.">
-                <span class="slide-tag red">The Operational Reality · Problem Statement</span>
-                <h2 class="slide-title">The Problem in the Client's Language</h2>
-                <div class="quote-box">
-                    "Fifty-eight percent of tickets are some version of 'where is my order'. My agents copy and paste the same four replies all day. Average first response is nine hours."
-                    <span class="quote-author">— Arpita, Head of Customer Experience (CX)</span>
-                </div>
-
-                <div class="grid-2">
-                    <div class="glass-card">
-                        <h4 style="color:#FFFFFF; margin-bottom:12px;">📊 Current Operational Bottlenecks:</h4>
-                        <ul style="color:var(--text-secondary); font-size:0.88rem; line-height:1.7; padding-left:18px;">
-                            <li><strong>Volume Crush:</strong> 9,000 support tickets arrive every week in informal Hinglish/English.</li>
-                            <li><strong>Repetitive Lookups:</strong> 5,220 tickets/week (~745/day) are spent repeatedly checking courier portals.</li>
-                            <li><strong>Manual Copy-Pasting:</strong> Agents manually copy from a shared Google Doc with 4 static canned replies.</li>
-                            <li><strong>Zero Tagging:</strong> Agents only categorize 'when they remember to', leaving Dhaga blind to trends.</li>
-                        </ul>
-                    </div>
-
-                    <div class="glass-card">
-                        <h4 style="color:#FFFFFF; margin-bottom:12px;">💸 Labor & Headcount Cost:</h4>
-                        <ul style="color:var(--text-secondary); font-size:0.88rem; line-height:1.7; padding-left:18px;">
-                            <li><strong>20 out of 34 Support Agents (FTEs)</strong> spend their entire day on canned lookups.</li>
-                            <li>At ₹25,000/month fully loaded cost, Dhaga spends <strong>₹5.0 Lakhs to ₹6.0 Lakhs every month</strong> just typing status updates.</li>
-                            <li><strong>₹60 Lakhs – ₹72 Lakhs per year</strong> in wasted human capital.</li>
-                        </ul>
-                    </div>
+            <div class="thumb-item" onclick="jumpToSlide(2)">
+                <span class="thumb-number">2</span>
+                <div class="thumb-card">
+                    <span class="thumb-mini-tag" style="color:var(--accent-rose);">The Crisis</span>
+                    <span class="thumb-mini-title">Arpita's 58% WISMO Backlog</span>
                 </div>
             </div>
+            <div class="thumb-item" onclick="jumpToSlide(3)">
+                <span class="thumb-number">3</span>
+                <div class="thumb-card">
+                    <span class="thumb-mini-tag" style="color:var(--accent-purple);">Cross-Functional</span>
+                    <span class="thumb-mini-title">COD RTO Bleed & Return Blindspot</span>
+                </div>
+            </div>
+            <div class="thumb-item" onclick="jumpToSlide(4)">
+                <span class="thumb-number">4</span>
+                <div class="thumb-card">
+                    <span class="thumb-mini-tag" style="color:var(--accent-emerald);">Architecture</span>
+                    <span class="thumb-mini-title">Code vs. Model Boundary</span>
+                </div>
+            </div>
+            <div class="thumb-item" onclick="jumpToSlide(5)">
+                <span class="thumb-number">5</span>
+                <div class="thumb-card">
+                    <span class="thumb-mini-tag" style="color:var(--accent-blue);">CTO Dev ROI</span>
+                    <span class="thumb-mini-title">Token Arithmetic (133x Return)</span>
+                </div>
+            </div>
+            <div class="thumb-item" onclick="jumpToSlide(6)">
+                <span class="thumb-number">6</span>
+                <div class="thumb-card">
+                    <span class="thumb-mini-tag" style="color:var(--accent-rose);">Edge Case</span>
+                    <span class="thumb-mini-title">What Broke: WhatsApp Collision</span>
+                </div>
+            </div>
+            <div class="thumb-item" onclick="jumpToSlide(7)">
+                <span class="thumb-number">7</span>
+                <div class="thumb-card">
+                    <span class="thumb-mini-tag" style="color:var(--accent-emerald);">Demo & Impact</span>
+                    <span class="thumb-mini-title">Monday Morning Success Target</span>
+                </div>
+            </div>
+        </div>
 
-            <!-- SLIDE 3: CROSS-FUNCTIONAL BUSINESS FALLOUT -->
-            <div class="slide" id="slide-3" data-notes="The 9-hour delay spills into every department. Faizan in Supply Chain notes that 61% of orders are Cash on Delivery. When anxious COD buyers wait 9 hours for tracking updates, they reject the parcel at their doorstep—driving RTO to 26% and costing ₹15 Lakhs a week in wasted logistics! Neha in Merchandising can't fix product fit because 44% of returns land in an unanalyzed 'Other' box. And Dev CTO warned us: 16 engineers, 0 ML engineers. Must be simple, deterministic, and maintainable.">
-                <span class="slide-tag purple">Cross-Functional Impact · Stakeholder Alignment</span>
-                <h2 class="slide-title">The Downstream Cross-Functional Fallout</h2>
-                <p class="slide-subtitle">A 9-hour response blackout does not just frustrate buyers; it inflates RTO logistics burn and creates data blindspots across the leadership team.</p>
+        <!-- CENTER SLIDE CANVAS (16:9 WIDESCREEN PPT) -->
+        <div class="ppt-stage">
+            <div class="ppt-slide-canvas" id="slideCanvas">
 
-                <div class="grid-3">
-                    <div class="glass-card">
-                        <div style="font-size:1.8rem; margin-bottom:8px;">🚚</div>
-                        <h4 style="color:var(--accent-amber); margin-bottom:8px;">Faizan (Supply Chain)</h4>
-                        <div style="font-weight:700; color:#FFFFFF; margin-bottom:6px;">26% COD Return-to-Origin (RTO)</div>
-                        <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.5;">
-                            61% of orders are Cash on Delivery. Anxious COD customers who experience a 9-hour blackout reject parcels at the doorstep.
-                            <br><br>
-                            <strong>Cost:</strong> ₹120 logistics loss per shipment across 48,000 weekly orders = <strong>₹15 Lakhs/week burned</strong>.
+                <!-- SLIDE 1: TITLE & EXECUTIVE SUMMARY -->
+                <div class="slide-content-pane active" id="slide-1" data-notes="Good afternoon mentors and judges. Dhaga & Co. has reached ₹80 Crore ARR with 700,000 monthly active shoppers in Tier-2 and Tier-3 India. But our support operations have hit a breaking point. Arpita's 34 Freshdesk agents receive 9,000 tickets every week, and 58% are repetitive 'where is my order' lookups. Today, average first response is 9 hours because agents manually copy canned replies from a Google Doc. This MVP proves how we can eliminate the 9-hour backlog, automate 72% of tickets in 18 seconds, save ₹5 Lakhs every month, and stay 100% truthful using pure Python and Google Gemini.">
+                    <div class="slide-header">
+                        <span class="slide-badge blue">Executive Presentation · Mini Project 1</span>
+                        <h1 class="slide-h1">Dhaga & Co. CX Copilot & Autonomous Triage MVP</h1>
+                        <p class="slide-sub">
+                            Eliminating Dhaga & Co.'s 9-hour response time on 9,000 weekly tickets by coupling 
+                            <strong>Google Gemini LLMs (for language)</strong> with <strong>Deterministic Python & Postgres (for ground truth)</strong>.
                         </p>
                     </div>
 
-                    <div class="glass-card">
-                        <div style="font-size:1.8rem; margin-bottom:8px;">👗</div>
-                        <h4 style="color:var(--accent-purple); margin-bottom:8px;">Neha (Merchandising)</h4>
-                        <div style="font-weight:700; color:#FFFFFF; margin-bottom:6px;">44% 'Other' Return Blindspot</div>
-                        <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.5;">
-                            Returns are 31% overall, and 44% land in an untagged 'Other' free-text box.
-                            <br><br>
-                            Neha can only read a few hundred by hand, with zero visibility into whether returns are caused by loose stitching, fabric shrinkage, or tight kurti fits.
-                        </p>
-                    </div>
+                    <div class="slide-body">
+                        <div class="card-row-4" style="margin-bottom: 18px;">
+                            <div class="metric-card-ppt">
+                                <div class="metric-val-ppt" style="color:var(--accent-blue);">9,000</div>
+                                <div class="metric-lbl-ppt">Weekly Tickets</div>
+                                <div class="metric-sub-ppt">Freshdesk & WhatsApp</div>
+                            </div>
+                            <div class="metric-card-ppt">
+                                <div class="metric-val-ppt" style="color:var(--accent-rose);">58%</div>
+                                <div class="metric-lbl-ppt">WISMO Inquiries</div>
+                                <div class="metric-sub-ppt">~5,220 Lookups/Wk</div>
+                            </div>
+                            <div class="metric-card-ppt">
+                                <div class="metric-val-ppt" style="color:var(--accent-emerald);">18s</div>
+                                <div class="metric-lbl-ppt">Response Time</div>
+                                <div class="metric-sub-ppt"><del>9.0 Hours</del> Baseline (99.9% faster)</div>
+                            </div>
+                            <div class="metric-card-ppt">
+                                <div class="metric-val-ppt" style="color:var(--accent-purple);">133x</div>
+                                <div class="metric-lbl-ppt">Net ROI</div>
+                                <div class="metric-sub-ppt">₹864/wk vs ₹5L Saved</div>
+                            </div>
+                        </div>
 
-                    <div class="glass-card">
-                        <div style="font-size:1.8rem; margin-bottom:8px;">🛡️</div>
-                        <h4 style="color:var(--accent-blue); margin-bottom:8px;">Dev (CTO & Engineering)</h4>
-                        <div style="font-weight:700; color:#FFFFFF; margin-bottom:6px;">16 Devs · 0 ML Engineers</div>
-                        <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.5;">
-                            Demands deterministic reliability, pure Python code, and zero hallucination risk.
-                            <br><br>
-                            An operational pattern-based workflow using 11M rows of Postgres order history is maintainable on Monday morning; complex ML pipelines are not.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SLIDE 4: ARCHITECTURE: CODE VS. MODEL -->
-            <div class="slide" id="slide-4" data-notes="Here is our core technical thesis: 'A model earns its place on language, not lookup.' Monolithic prompts fail because they try to guess delivery dates and calculate return windows inside LLM tokens. We decoupled language from lookup. Model A Flash at temp 0.1 only parses Hinglish. Pure Python queries Postgres and computes the 7-day return policy. Model A Flash at temp 0.4 drafts the reply strictly on verified facts. Model B Pro at temp 0.0 acts as an unbending truthfulness auditor. Verified WISMO auto-dispatches in 18s. Discretionary cases go to frontline agents with 1-click approval.">
-                <span class="slide-tag green">System Architecture · Code vs. Model Split</span>
-                <h2 class="slide-title">The Code vs. Model Architecture</h2>
-                <div class="quote-box" style="border-left-color: var(--accent-emerald);">
-                    "A model earns its place on language, not lookup." Direct deterministic queries against 11M Postgres order rows prevent all hallucination.
-                </div>
-
-                <div class="grid-4" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:20px;">
-                    <div class="stage-card">
-                        <span class="stage-badge" style="background:rgba(56, 189, 248, 0.2); color:var(--accent-blue);">Stage 1 · Model A</span>
-                        <div class="stage-title">Language & Intent Router</div>
-                        <div class="stage-desc"><code>gemini-2.5-flash</code> @ Temp 0.1<br>Normalizes messy Hinglish, typos, and emotional urgency into structured schema.</div>
-                    </div>
-                    <div class="stage-card">
-                        <span class="stage-badge" style="background:rgba(52, 211, 153, 0.2); color:var(--accent-emerald);">Stage 2 · Pure Python</span>
-                        <div class="stage-title">Deterministic Policy Gate</div>
-                        <div class="stage-desc">Pure Code + SQLite/Postgres<br>Queries 11M Postgres rows; calculates <code>(today - delivered_date) <= 7</code> mathematically. Zero hallucination.</div>
-                    </div>
-                    <div class="stage-card">
-                        <span class="stage-badge" style="background:rgba(129, 140, 248, 0.2); color:var(--accent-indigo);">Stage 3 · Model A</span>
-                        <div class="stage-title">Context-Injected Drafter</div>
-                        <div class="stage-desc"><code>gemini-2.5-flash</code> @ Temp 0.4<br>Conditioned strictly on verified DB facts. Generates warm, empathetic Hinglish with tracking link.</div>
-                    </div>
-                    <div class="stage-card">
-                        <span class="stage-badge" style="background:rgba(192, 132, 252, 0.2); color:var(--accent-purple);">Stage 4 · Model B</span>
-                        <div class="stage-title">Evaluator-Optimizer Gate</div>
-                        <div class="stage-desc"><code>gemini-2.5-pro</code> @ Temp 0.0<br>Audits draft against ground truth. Strictly forbids hallucinated dates before unread auto-dispatch.</div>
-                    </div>
-                </div>
-
-                <div class="glass-card" style="padding:14px 20px;">
-                    <strong style="color:#FFFFFF;">Dispatch Routing Protocol:</strong>
-                    <span style="color:var(--accent-emerald); font-weight:700; margin-left:8px;">[AUTO_DISPATCH]</span> <span style="color:var(--text-secondary); font-size:0.82rem;">Verified WISMO & strict policy rejections published unread in 18s.</span>
-                    <span style="color:var(--accent-amber); font-weight:700; margin-left:14px;">[AGENT_REVIEW]</span> <span style="color:var(--text-secondary); font-size:0.82rem;">Returns & exceptions pre-drafted for 1-click human approval.</span>
-                    <span style="color:var(--accent-rose); font-weight:700; margin-left:14px;">[ESCALATE]</span> <span style="color:var(--text-secondary); font-size:0.82rem;">Hostile complaints routed to Arpita.</span>
-                </div>
-            </div>
-
-            <!-- SLIDE 5: DEV'S CTO FINANCIAL DEFENSE -->
-            <div class="slide" id="slide-5" data-notes="Now for the financial defense that CTO Dev and Finance will scrutinize. The entire 4-stage pipeline uses 1,350 input tokens and 275 output tokens per ticket run. At blended Gemini Flash and Pro rates, each ticket run costs under 10 paise—₹0.096. For all 9,000 tickets every week, our weekly LLM bill is ₹864—ten US dollars a week. In return, we liberate 20 full-time support agents earning ₹25,000 a month, saving ₹5,00,000 every month. That is a 133-to-1 net return on investment, with zero ML infrastructure overhead.">
-                <span class="slide-tag blue">Financial Feasibility · CTO Dev's Arithmetic</span>
-                <h2 class="slide-title">The Token Arithmetic & ROI Line</h2>
-                <p class="slide-subtitle">Processing 9,000 weekly tickets (39,000/month) at blended Gemini Flash & Pro pricing.</p>
-
-                <div class="grid-2">
-                    <div class="glass-card">
-                        <h4 style="color:#FFFFFF; margin-bottom:12px;">🔢 Token Footprint per Ticket Run:</h4>
-                        <table class="custom-table">
-                            <thead>
-                                <tr><th>Pipeline Step</th><th>Model Used</th><th>Tokens</th><th>Cost (INR)</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>Step 1: Router & Extractor</td><td>Gemini 2.5 Flash</td><td>380 In / 85 Out</td><td>₹0.035</td></tr>
-                                <tr><td>Step 3: Response Drafter</td><td>Gemini 2.5 Flash</td><td>450 In / 130 Out</td><td>₹0.048</td></tr>
-                                <tr><td>Step 4: Evaluator Gate</td><td>Gemini 2.5 Pro</td><td>520 In / 60 Out</td><td>₹0.013</td></tr>
-                                <tr style="font-weight:700; background:rgba(56, 189, 248, 0.1);"><td>Total Blended Run</td><td>Dual Model</td><td>1,350 In / 275 Out</td><td>₹0.096 / run</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="glass-card">
-                        <h4 style="color:#FFFFFF; margin-bottom:12px;">💰 Headcount & Operational ROI:</h4>
-                        <table class="custom-table">
-                            <thead>
-                                <tr><th>Metric</th><th>Weekly Total</th><th>Monthly Total</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>Inbound Tickets</td><td>9,000 tickets</td><td>39,000 tickets</td></tr>
-                                <tr><td>Blended LLM Token Cost</td><td style="color:var(--accent-blue); font-weight:700;">₹864 / week (~$10)</td><td style="color:var(--accent-blue); font-weight:700;">₹3,744 / month</td></tr>
-                                <tr><td>Human Labor Reclaimed</td><td style="color:var(--accent-emerald); font-weight:700;">₹1,25,000 / week</td><td style="color:var(--accent-emerald); font-weight:700;">₹5,00,000 / month (20 FTEs)</td></tr>
-                                <tr style="font-weight:700; background:rgba(52, 211, 153, 0.1);"><td>Net Monthly Savings</td><td style="color:var(--accent-emerald);">₹1,24,136 / wk</td><td style="color:var(--accent-emerald);">₹4,96,256 / mo (133x ROI)</td></tr>
-                            </tbody>
-                        </table>
-                        <div style="margin-top:14px; font-size:0.78rem; color:var(--text-muted);">
-                            *Assuming ₹25,000/month fully loaded agent cost. Exchange rate ₹86.5/USD.
+                        <div class="ppt-box" style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px;">
+                            <div>
+                                <strong style="color:#FFFFFF;">Stakeholder Review:</strong>
+                                <span style="color:var(--text-sub); margin-left:8px;">Arpita (Head of CX) · Dev (CTO) · Ritu (CEO) · Faizan (Supply Chain) · Neha (Merchandising)</span>
+                            </div>
+                            <span style="color:var(--accent-blue); font-size:0.8rem; font-weight:700;">Press Space or Next ▶</span>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- SLIDE 6: WHAT BROKE THAT WE DID NOT EXPECT -->
-            <div class="slide" id="slide-6" data-notes="Every real system hits surprises in production. What broke that we did not expect? Over 35% of WhatsApp customers write without any Order ID—they just say 'Mera kapda kab milega'. When we looked up their phone number in Postgres, our best repeat customers had two active orders simultaneously. Early single-prompt models tried to guess which order the customer meant, and guessed wrong 50% of the time! That was dangerous. We fixed it deterministically: if a phone number returns multiple active orders and no ID is provided, the system catches AMBIGUOUS_ORDER_REFERENCE, blocks automated dispatch, formats a polite clarifying question in Hinglish listing the candidates, and flags the ticket in the agent workbench. We fail visibly and safely.">
-                <span class="slide-tag red">Intentional Failure Mode · Production Resilience</span>
-                <h2 class="slide-title">What Broke That We Did Not Expect</h2>
-                <p class="slide-subtitle">The WhatsApp Phone Number Collision: How real-world user behavior forced a critical architectural safeguard.</p>
-
-                <div class="grid-2">
-                    <div class="glass-card" style="border-color:#7F1D1D; background:rgba(31, 25, 25, 0.8);">
-                        <h4 style="color:#F87171; margin-bottom:12px;">❌ The Unexpected Failure Mode:</h4>
-                        <p style="font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">
-                            Over <strong>35% of Tier-2/3 WhatsApp customers never mention their Order ID</strong> in opening messages (e.g. <em>"Mera parcel nahi aaya refund do"</em>).
-                            <br><br>
-                            Repeat buyers frequently had <strong>two active concurrent orders</strong> in Postgres (e.g., an Anarkali Kurti shipped yesterday, and a Kidswear set processing today).
-                            <br><br>
-                            <strong>How It Broke:</strong> Early LLM prompts tried to guess the 'most relevant' order. The model guessed wrong 50% of the time, providing Delhivery tracking details for a Kurti when the customer was asking about the Kidswear set!
-                        </p>
-                    </div>
-
-                    <div class="glass-card" style="border-color:#059669; background:rgba(6, 78, 59, 0.5);">
-                        <h4 style="color:#34D399; margin-bottom:12px;">✅ The Deterministic Safeguard:</h4>
-                        <p style="font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">
-                            We implemented an explicit collision check in deterministic Python (<code>lookup_order_details</code>).
-                            <br><br>
-                            If customer phone returns &gt; 1 active orders and no specific Order ID is in message text:
-                        </p>
-                        <ul style="font-size:0.85rem; color:#E2E8F0; line-height:1.7; padding-left:18px;">
-                            <li>Emits <code>AMBIGUOUS_ORDER_REFERENCE</code>.</li>
-                            <li>Strictly blocks unread automated dispatch.</li>
-                            <li>Automatically formats a polite clarifying prompt: <em>"Aapke number par 2 active orders hain (Kurti #DH-10520 & Boys Set #DH-10521). Kaunse order ke baare me jankari chahiye?"</em></li>
-                            <li>Flags ticket in agent workbench with a visible warning pill.</li>
-                        </ul>
+                    <div class="slide-footer-ppt">
+                        <span class="slide-footer-brand">Dhaga & Co. · CX Copilot MVP</span>
+                        <span>Slide 1 of 7</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- SLIDE 7: SUMMARY & MONDAY MORNING IMPACT -->
-            <div class="slide" id="slide-7" data-notes="To wrap up, here is what success looks like on Monday morning. First Response Time on 58% of tickets drops from 9 hours to under 30 seconds. Over 70% of WISMO queries resolve autonomously without a human touching them. 20 full-time agents are liberated from copy-pasting to handle complex fit and sizing consults. And Neha gets 100% structured tagging on return reasons. The entire system is built, tested, and ready. Thank you.">
-                <span class="slide-tag green">Business Impact · Executive Summary</span>
-                <h2 class="slide-title">What Success Looks Like on Monday Morning</h2>
-                <p class="slide-subtitle">Measurable, verifiable impact against Dhaga & Co.'s existing Freshdesk and Postgres data assets.</p>
-
-                <div class="grid-2">
-                    <div class="glass-card">
-                        <h4 style="color:#FFFFFF; margin-bottom:14px;">🎯 Baseline vs. MVP Target Comparison:</h4>
-                        <table class="custom-table">
-                            <thead>
-                                <tr><th>Metric</th><th>Current Baseline</th><th>With CX Copilot</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><strong>First Response Time (WISMO)</strong></td><td style="color:var(--accent-rose);">9.0 Hours</td><td style="color:var(--accent-emerald); font-weight:700;">18 Seconds (99.9% faster)</td></tr>
-                                <tr><td><strong>First Response Time (Assisted)</strong></td><td style="color:var(--accent-rose);">9.0 Hours</td><td style="color:var(--accent-emerald); font-weight:700;">12 Minutes (97.8% faster)</td></tr>
-                                <tr><td><strong>Autonomous Resolution Rate</strong></td><td style="color:var(--accent-rose);">0% (Manual)</td><td style="color:var(--accent-emerald); font-weight:700;">72.4% (~3,700+ tck/wk)</td></tr>
-                                <tr><td><strong>Return Tagging Compliance</strong></td><td>'When remembered'</td><td style="color:var(--accent-emerald); font-weight:700;">100% Structured Reasons</td></tr>
-                                <tr><td><strong>Agent Hours Reclaimed</strong></td><td>0 hrs</td><td style="color:var(--accent-blue); font-weight:700;">~800+ Agent Hrs / Week</td></tr>
-                            </tbody>
-                        </table>
+                <!-- SLIDE 2: THE PROBLEM IN CLIENT'S WORDS -->
+                <div class="slide-content-pane" id="slide-2" data-notes="Here is the problem in Arpita's exact words: 'Fifty-eight percent of tickets are some version of where is my order. My agents copy and paste the same four replies all day. Average first response is nine hours.' 20 out of 34 agents do nothing but copy-paste generic canned replies from a shared Google Document. At ₹25,000 to ₹30,000 per agent, Dhaga spends over ₹60 Lakhs every year on manual typing.">
+                    <div class="slide-header">
+                        <span class="slide-badge red">The Operational Reality · Problem Statement</span>
+                        <h2 class="slide-h1">The Problem in the Client's Language</h2>
                     </div>
 
-                    <div class="glass-card" style="display:flex; flex-direction:column; justify-content:center; text-align:center; padding:32px;">
-                        <div style="font-size:2.8rem; margin-bottom:12px;">🚀</div>
-                        <h3 style="font-family:'Outfit'; font-size:1.6rem; color:#FFFFFF; margin-bottom:10px;">Ready for Live Demonstration</h3>
-                        <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.6; margin-bottom:24px;">
-                            Explore the live Agent Workbench, the WhatsApp Channel Simulator, and test real-time fail-safe disambiguation.
-                        </p>
-                        <a href="http://localhost:8501" target="_blank" class="btn-ctrl primary" style="justify-content:center; padding:12px 24px; font-size:0.95rem;">
-                            Open Dhaga CX Copilot Streamlit App ↗
-                        </a>
+                    <div class="slide-body">
+                        <div class="quote-card-ppt">
+                            "Fifty-eight percent of tickets are some version of 'where is my order'. My agents copy and paste the same four replies all day. Average first response is nine hours."
+                            <span class="quote-speaker-ppt">— Arpita, Head of Customer Experience (CX)</span>
+                        </div>
+
+                        <div class="grid-split-2">
+                            <div class="ppt-box">
+                                <h4>📊 Current Operational Practice:</h4>
+                                <ul>
+                                    <li><strong>Volume Crush:</strong> 9,000 support tickets arrive every week across Freshdesk & Gupshup WhatsApp.</li>
+                                    <li><strong>Repetitive Lookups:</strong> 5,220 tickets/week (~745/day) spent checking courier portals.</li>
+                                    <li><strong>Manual Copy-Pasting:</strong> Agents manually copy from a shared Google Doc with 4 static canned replies.</li>
+                                    <li><strong>Zero Tagging:</strong> Agents only categorize 'when they remember to', leaving Dhaga blind to trends.</li>
+                                </ul>
+                            </div>
+
+                            <div class="ppt-box">
+                                <h4>💸 Headcount & Financial Cost:</h4>
+                                <ul>
+                                    <li><strong>20 out of 34 Support Agents (FTEs)</strong> spend their entire day on canned lookups.</li>
+                                    <li>At ₹25,000/month fully loaded cost, Dhaga spends <strong>₹5.0 Lakhs to ₹6.0 Lakhs every month</strong> just typing canned updates.</li>
+                                    <li><strong>₹60 Lakhs – ₹72 Lakhs per year</strong> in wasted human capital.</li>
+                                    <li>First response time averages <strong>9 hours</strong> on Freshdesk.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slide-footer-ppt">
+                        <span class="slide-footer-brand">Dhaga & Co. · Problem Diagnosis</span>
+                        <span>Slide 2 of 7</span>
                     </div>
                 </div>
-            </div>
 
+                <!-- SLIDE 3: CROSS-FUNCTIONAL BUSINESS FALLOUT -->
+                <div class="slide-content-pane" id="slide-3" data-notes="The 9-hour delay spills into every department. Faizan in Supply Chain notes that 61% of orders are Cash on Delivery. When anxious COD buyers wait 9 hours for tracking updates, they reject the parcel at their doorstep—driving RTO to 26% and costing ₹15 Lakhs a week in wasted logistics! Neha in Merchandising can't fix product fit because 44% of returns land in an unanalyzed 'Other' box. And Dev CTO warned us: 16 engineers, 0 ML engineers. Must be simple, deterministic, and maintainable.">
+                    <div class="slide-header">
+                        <span class="slide-badge purple">Cross-Functional Impact · Stakeholder Alignment</span>
+                        <h2 class="slide-h1">The Downstream Cross-Functional Fallout</h2>
+                        <p class="slide-sub">A 9-hour response blackout inflates RTO logistics burn and creates data blindspots across the executive team.</p>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="grid-split-3">
+                            <div class="ppt-box">
+                                <div style="font-size:1.6rem; margin-bottom:6px;">🚚</div>
+                                <h4 style="color:var(--accent-amber);">Faizan (Supply Chain)</h4>
+                                <strong style="color:#FFFFFF; font-size:0.85rem;">26% COD Return-to-Origin (RTO)</strong>
+                                <p style="font-size:0.78rem; color:var(--text-sub); line-height:1.45; margin-top:6px;">
+                                    61% of orders are Cash on Delivery. Anxious COD customers who wait 9 hours reject parcels at their doorstep.
+                                    <br><br>
+                                    <strong>Cost:</strong> ₹120 logistics loss per shipment = <strong>₹15 Lakhs/week burned</strong>.
+                                </p>
+                            </div>
+
+                            <div class="ppt-box">
+                                <div style="font-size:1.6rem; margin-bottom:6px;">👗</div>
+                                <h4 style="color:var(--accent-purple);">Neha (Merchandising)</h4>
+                                <strong style="color:#FFFFFF; font-size:0.85rem;">44% 'Other' Return Blindspot</strong>
+                                <p style="font-size:0.78rem; color:var(--text-sub); line-height:1.45; margin-top:6px;">
+                                    Returns are 31% overall, and 44% land in an untagged 'Other' free-text box.
+                                    <br><br>
+                                    Neha can only read a few hundred by hand, with zero visibility into whether returns are caused by loose stitching or tight kurti fits.
+                                </p>
+                            </div>
+
+                            <div class="ppt-box">
+                                <div style="font-size:1.6rem; margin-bottom:6px;">🛡️</div>
+                                <h4 style="color:var(--accent-blue);">Dev (CTO & Engineering)</h4>
+                                <strong style="color:#FFFFFF; font-size:0.85rem;">16 Devs · 0 ML Engineers</strong>
+                                <p style="font-size:0.78rem; color:var(--text-sub); line-height:1.45; margin-top:6px;">
+                                    Demands deterministic safety, pure Python code, and zero hallucination risk.
+                                    <br><br>
+                                    An operational pattern-based workflow using 11M rows of Postgres order history is maintainable on Monday morning; complex ML pipelines are not.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slide-footer-ppt">
+                        <span class="slide-footer-brand">Dhaga & Co. · Business Impact</span>
+                        <span>Slide 3 of 7</span>
+                    </div>
+                </div>
+
+                <!-- SLIDE 4: ARCHITECTURE: CODE VS. MODEL -->
+                <div class="slide-content-pane" id="slide-4" data-notes="Here is our core technical thesis: 'A model earns its place on language, not lookup.' Monolithic prompts fail because they try to guess delivery dates and calculate return windows inside LLM tokens. We decoupled language from lookup. Model A Flash at temp 0.1 only parses Hinglish. Pure Python queries Postgres and computes the 7-day return policy. Model A Flash at temp 0.4 drafts the reply strictly on verified facts. Model B Pro at temp 0.0 acts as an unbending truthfulness auditor. Verified WISMO auto-dispatches in 18s. Discretionary cases go to frontline agents with 1-click approval.">
+                    <div class="slide-header">
+                        <span class="slide-badge green">System Architecture · Code vs. Model Split</span>
+                        <h2 class="slide-h1">The Code vs. Model Architecture</h2>
+                        <div class="quote-card-ppt" style="border-left-color: var(--accent-emerald); padding:10px 16px; margin: 8px 0;">
+                            "A model earns its place on language, not lookup." Direct deterministic queries against 11M Postgres order rows prevent all hallucination.
+                        </div>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="flow-container-ppt">
+                            <div class="flow-step-ppt">
+                                <span class="flow-step-num" style="background:rgba(56, 189, 248, 0.2); color:var(--accent-blue);">Stage 1 · Flash @ 0.1</span>
+                                <div class="flow-step-title">Language & Intent Router</div>
+                                <div class="flow-step-desc">Normalizes messy Hinglish, typos, and urgency into structured schema.</div>
+                            </div>
+                            <div class="flow-step-ppt">
+                                <span class="flow-step-num" style="background:rgba(52, 211, 153, 0.2); color:var(--accent-emerald);">Stage 2 · Pure Python</span>
+                                <div class="flow-step-title">Deterministic Policy Gate</div>
+                                <div class="flow-step-desc">Queries 11M Postgres rows; calculates <code>(today - delivered) <= 7</code> mathematically. Zero hallucination.</div>
+                            </div>
+                            <div class="flow-step-ppt">
+                                <span class="flow-step-num" style="background:rgba(129, 140, 248, 0.2); color:var(--accent-indigo);">Stage 3 · Flash @ 0.4</span>
+                                <div class="flow-step-title">Context-Injected Drafter</div>
+                                <div class="flow-step-desc">Conditioned strictly on verified DB facts. Generates warm Hinglish with tracking link.</div>
+                            </div>
+                            <div class="flow-step-ppt">
+                                <span class="flow-step-num" style="background:rgba(192, 132, 252, 0.2); color:var(--accent-purple);">Stage 4 · Pro @ 0.0</span>
+                                <div class="flow-step-title">Evaluator-Optimizer Gate</div>
+                                <div class="flow-step-desc">Audits draft against ground truth. Strictly forbids hallucinated dates before unread dispatch.</div>
+                            </div>
+                        </div>
+
+                        <div class="ppt-box" style="padding:10px 16px;">
+                            <strong style="color:#FFFFFF; font-size:0.8rem;">Dispatch Protocol:</strong>
+                            <span style="color:var(--accent-emerald); font-weight:700; font-size:0.78rem; margin-left:8px;">[AUTO_DISPATCH]</span> <span style="color:var(--text-sub); font-size:0.75rem;">Verified WISMO published unread in 18s.</span>
+                            <span style="color:var(--accent-amber); font-weight:700; font-size:0.78rem; margin-left:12px;">[AGENT_REVIEW]</span> <span style="color:var(--text-sub); font-size:0.75rem;">Returns & exceptions pre-drafted for 1-click approval.</span>
+                            <span style="color:var(--accent-rose); font-weight:700; font-size:0.78rem; margin-left:12px;">[ESCALATE]</span> <span style="color:var(--text-sub); font-size:0.75rem;">Hostile complaints to Arpita.</span>
+                        </div>
+                    </div>
+
+                    <div class="slide-footer-ppt">
+                        <span class="slide-footer-brand">Dhaga & Co. · Architectural Design</span>
+                        <span>Slide 4 of 7</span>
+                    </div>
+                </div>
+
+                <!-- SLIDE 5: DEV'S CTO FINANCIAL DEFENSE -->
+                <div class="slide-content-pane" id="slide-5" data-notes="Now for the financial defense that CTO Dev and Finance will scrutinize. The entire 4-stage pipeline uses 1,350 input tokens and 275 output tokens per ticket run. At blended Gemini Flash and Pro rates, each ticket run costs under 10 paise—₹0.096. For all 9,000 tickets every week, our weekly LLM bill is ₹864—ten US dollars a week. In return, we liberate 20 full-time support agents earning ₹25,000 a month, saving ₹5,00,000 every month. That is a 133-to-1 net return on investment, with zero ML infrastructure overhead.">
+                    <div class="slide-header">
+                        <span class="slide-badge blue">Financial Feasibility · CTO Dev's Arithmetic</span>
+                        <h2 class="slide-h1">The Token Arithmetic & 133x ROI Line</h2>
+                        <p class="slide-sub">Processing 9,000 weekly tickets (39,000/month) at blended Gemini Flash & Pro pricing.</p>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="grid-split-2">
+                            <div class="ppt-box">
+                                <h4>🔢 Token Footprint per Ticket Run:</h4>
+                                <table class="ppt-table">
+                                    <thead>
+                                        <tr><th>Pipeline Step</th><th>Model</th><th>Tokens</th><th>Cost</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Step 1: Router</td><td>Gemini 2.5 Flash</td><td>380 In / 85 Out</td><td>₹0.035</td></tr>
+                                        <tr><td>Step 3: Drafter</td><td>Gemini 2.5 Flash</td><td>450 In / 130 Out</td><td>₹0.048</td></tr>
+                                        <tr><td>Step 4: Evaluator</td><td>Gemini 2.5 Pro</td><td>520 In / 60 Out</td><td>₹0.013</td></tr>
+                                        <tr style="font-weight:700; background:rgba(56, 189, 248, 0.1);"><td>Total Blended Run</td><td>Dual Model</td><td>1,350 In / 275 Out</td><td style="color:var(--accent-blue);">₹0.096 / run</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="ppt-box">
+                                <h4>💰 Headcount & Operational ROI:</h4>
+                                <table class="ppt-table">
+                                    <thead>
+                                        <tr><th>Metric</th><th>Weekly Total</th><th>Monthly Total</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Inbound Tickets</td><td>9,000 tickets</td><td>39,000 tickets</td></tr>
+                                        <tr><td>Blended LLM Cost</td><td style="color:var(--accent-blue); font-weight:700;">₹864 / week (~$10)</td><td style="color:var(--accent-blue); font-weight:700;">₹3,744 / month</td></tr>
+                                        <tr><td>Labor Reclaimed</td><td style="color:var(--accent-emerald); font-weight:700;">₹1,25,000 / week</td><td style="color:var(--accent-emerald); font-weight:700;">₹5,00,000 / month</td></tr>
+                                        <tr style="font-weight:700; background:rgba(52, 211, 153, 0.1);"><td>Net Savings</td><td style="color:var(--accent-emerald);">₹1,24,136 / wk</td><td style="color:var(--accent-emerald);">₹4,96,256 / mo (133x ROI)</td></tr>
+                                    </tbody>
+                                </table>
+                                <div style="margin-top:8px; font-size:0.72rem; color:var(--text-muted);">
+                                    *20 FTE agents @ ₹25,000/mo. Exchange rate ₹86.5/USD. Zero ML ops overhead.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slide-footer-ppt">
+                        <span class="slide-footer-brand">Dhaga & Co. · Cost Arithmetic</span>
+                        <span>Slide 5 of 7</span>
+                    </div>
+                </div>
+
+                <!-- SLIDE 6: WHAT BROKE THAT WE DID NOT EXPECT -->
+                <div class="slide-content-pane" id="slide-6" data-notes="Every real system hits surprises in production. What broke that we did not expect? Over 35% of WhatsApp customers write without any Order ID—they just say 'Mera kapda kab milega'. When we looked up their phone number in Postgres, our best repeat customers had two active orders simultaneously. Early single-prompt models tried to guess which order the customer meant, and guessed wrong 50% of the time! That was dangerous. We fixed it deterministically: if a phone number returns multiple active orders and no ID is provided, the system catches AMBIGUOUS_ORDER_REFERENCE, blocks automated dispatch, formats a polite clarifying question in Hinglish listing the candidates, and flags the ticket in the agent workbench. We fail visibly and safely.">
+                    <div class="slide-header">
+                        <span class="slide-badge red">Intentional Failure Mode · Production Resilience</span>
+                        <h2 class="slide-h1">What Broke That We Did Not Expect</h2>
+                        <p class="slide-sub">The WhatsApp Phone Number Collision: How real user behavior forced a critical architectural safeguard.</p>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="grid-split-2">
+                            <div class="ppt-box" style="border-color:#7F1D1D; background:rgba(31, 25, 25, 0.8);">
+                                <h4 style="color:#F87171;">❌ The Unexpected Failure Mode:</h4>
+                                <p style="font-size:0.8rem; color:var(--text-sub); line-height:1.5;">
+                                    Over <strong>35% of Tier-2/3 WhatsApp customers never mention their Order ID</strong> in opening messages (e.g. <em>"Mera parcel nahi aaya refund do"</em>).
+                                    <br><br>
+                                    Repeat buyers frequently had <strong>two active concurrent orders</strong> in Postgres (e.g., an Anarkali Kurti shipped yesterday, and a Kidswear set processing today).
+                                    <br><br>
+                                    <strong>How It Broke:</strong> Early LLM prompts tried to guess the 'most relevant' order. The model guessed wrong 50% of the time, sending Delhivery tracking for a Kurti when the customer asked about the Kidswear set!
+                                </p>
+                            </div>
+
+                            <div class="ppt-box" style="border-color:#059669; background:rgba(6, 78, 59, 0.5);">
+                                <h4 style="color:#34D399;">✅ The Deterministic Safeguard:</h4>
+                                <p style="font-size:0.8rem; color:var(--text-sub); line-height:1.5;">
+                                    We implemented an explicit collision check in deterministic Python (<code>lookup_order_details</code>).
+                                    <br><br>
+                                    If customer phone returns &gt; 1 active orders and no specific Order ID is in message text:
+                                </p>
+                                <ul>
+                                    <li>Emits <code>AMBIGUOUS_ORDER_REFERENCE</code>.</li>
+                                    <li>Strictly blocks unread automated dispatch.</li>
+                                    <li>Automatically formats clarifying prompt listing candidate items.</li>
+                                    <li>Flags ticket in agent workbench with a visible warning pill.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slide-footer-ppt">
+                        <span class="slide-footer-brand">Dhaga & Co. · Failure Mode Safeguard</span>
+                        <span>Slide 6 of 7</span>
+                    </div>
+                </div>
+
+                <!-- SLIDE 7: SUMMARY & MONDAY MORNING IMPACT -->
+                <div class="slide-content-pane" id="slide-7" data-notes="To wrap up, here is what success looks like on Monday morning. First Response Time on 58% of tickets drops from 9 hours to under 30 seconds. Over 70% of WISMO queries resolve autonomously without a human touching them. 20 full-time agents are liberated from copy-pasting to handle complex fit and sizing consults. And Neha gets 100% structured tagging on return reasons. The entire system is built, tested, and ready. Thank you.">
+                    <div class="slide-header">
+                        <span class="slide-badge green">Business Impact · Executive Summary</span>
+                        <h2 class="slide-h1">What Success Looks Like on Monday Morning</h2>
+                        <p class="slide-sub">Measurable, verifiable impact against Dhaga & Co.'s existing Freshdesk and Postgres data assets.</p>
+                    </div>
+
+                    <div class="slide-body">
+                        <div class="grid-split-2">
+                            <div class="ppt-box">
+                                <h4>🎯 Baseline vs. MVP Target Comparison:</h4>
+                                <table class="ppt-table">
+                                    <thead>
+                                        <tr><th>Metric</th><th>Current Baseline</th><th>With CX Copilot</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td><strong>FRT (WISMO)</strong></td><td style="color:var(--accent-rose);">9.0 Hours</td><td style="color:var(--accent-emerald); font-weight:700;">18 Seconds (99.9% faster)</td></tr>
+                                        <tr><td><strong>FRT (Assisted)</strong></td><td style="color:var(--accent-rose);">9.0 Hours</td><td style="color:var(--accent-emerald); font-weight:700;">12 Minutes (97.8% faster)</td></tr>
+                                        <tr><td><strong>Auto Resolution</strong></td><td style="color:var(--accent-rose);">0% (Manual)</td><td style="color:var(--accent-emerald); font-weight:700;">72.4% (~3,700+ tck/wk)</td></tr>
+                                        <tr><td><strong>Return Tagging</strong></td><td>'When remembered'</td><td style="color:var(--accent-emerald); font-weight:700;">100% Structured Reasons</td></tr>
+                                        <tr><td><strong>Hours Reclaimed</strong></td><td>0 hrs</td><td style="color:var(--accent-blue); font-weight:700;">~800+ Agent Hrs / Week</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="ppt-box" style="display:flex; flex-direction:column; justify-content:center; text-align:center; padding:24px;">
+                                <div style="font-size:2.4rem; margin-bottom:8px;">🚀</div>
+                                <h3 style="font-family:'Outfit'; font-size:1.3rem; color:#FFFFFF; margin-bottom:6px;">Ready for Live Demonstration</h3>
+                                <p style="color:var(--text-sub); font-size:0.8rem; line-height:1.5; margin-bottom:16px;">
+                                    Inspect the Live Agent Workbench, the WhatsApp Simulator, and test real-time fail-safe disambiguation.
+                                </p>
+                                <a href="http://localhost:8501" target="_blank" class="ppt-btn primary" style="justify-content:center; padding:10px 18px;">
+                                    Open Dhaga CX Copilot Workbench ↗
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slide-footer-ppt">
+                        <span class="slide-footer-brand">Dhaga & Co. · Conclusion</span>
+                        <span>Slide 7 of 7</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </main>
+    </div>
 
-    <!-- Speaker Notes Dropup Panel -->
-    <div class="notes-panel" id="notesPanel">
-        <div class="notes-header">
-            <span>🎙️ Speaker Notes / Pitch Script (Slide <span id="notesSlideNum">1</span>)</span>
-            <button onclick="toggleNotes()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1rem;">✕</button>
+    <!-- SPEAKER NOTES DRAWER -->
+    <div class="ppt-notes-drawer" id="notesDrawer">
+        <div class="ppt-notes-title">
+            🎙️ Presenter Notes & Pitch Script (Slide <span id="notesSlideNumber">1</span>)
         </div>
-        <div class="notes-content" id="notesContent">
+        <div class="ppt-notes-body" id="notesBody">
             Loading script...
         </div>
     </div>
 
-    <!-- Bottom Controls & Navigation -->
-    <footer>
-        <div class="slide-indicators" id="indicators">
-            <!-- Populated dynamically via JS -->
+    <!-- BOTTOM POWERPOINT CONTROLS BAR -->
+    <div class="ppt-bottom-bar">
+        <div class="ppt-bottom-info">
+            <span class="ppt-slide-counter" id="slideCounterText">Slide 1 of 7</span>
+            <span>·</span>
+            <span style="font-size:0.75rem; color:var(--text-muted);">Use <kbd>Space</kbd> or <kbd>→</kbd> to advance</span>
         </div>
 
-        <div class="nav-controls">
-            <span class="slide-counter" id="slideCounter">Slide 1 / 7</span>
-            <button class="btn-ctrl" onclick="prevSlide()" title="Previous Slide (Left Arrow)">◀ Prev</button>
-            <button class="btn-ctrl primary" onclick="nextSlide()" title="Next Slide (Right Arrow or Space)">Next ▶</button>
+        <div class="ppt-controls-group">
+            <button class="ppt-ctrl-btn" onclick="prevSlide()" title="Previous Slide (Left Arrow)">◀ Prev</button>
+            <button class="ppt-ctrl-btn" onclick="nextSlide()" title="Next Slide (Right Arrow or Space)">Next ▶</button>
         </div>
-    </footer>
+    </div>
 
     <script>
         let currentSlide = 1;
         const totalSlides = 7;
 
-        function updateSlide() {
-            // Update active slide class
-            document.querySelectorAll('.slide').forEach((s, idx) => {
+        function updateSlideUI() {
+            // Update active slide pane
+            document.querySelectorAll('.slide-content-pane').forEach((s, idx) => {
                 s.classList.toggle('active', (idx + 1) === currentSlide);
             });
 
-            // Update indicators
-            document.querySelectorAll('.indicator-dot').forEach((dot, idx) => {
-                dot.classList.toggle('active', (idx + 1) === currentSlide);
+            // Update thumbnail rail selection
+            document.querySelectorAll('.thumb-item').forEach((thumb, idx) => {
+                thumb.classList.toggle('active', (idx + 1) === currentSlide);
             });
 
             // Update counter
-            document.getElementById('slideCounter').textContent = `Slide ${currentSlide} / ${totalSlides}`;
+            document.getElementById('slideCounterText').textContent = `Slide ${currentSlide} of ${totalSlides}`;
 
-            // Update Speaker Notes
-            const activeSlideElem = document.getElementById(`slide-${currentSlide}`);
-            if (activeSlideElem) {
-                const notes = activeSlideElem.getAttribute('data-notes') || 'No speaker notes for this slide.';
-                document.getElementById('notesContent').textContent = notes;
-                document.getElementById('notesSlideNum').textContent = currentSlide;
+            // Update notes
+            const activeSlide = document.getElementById(`slide-${currentSlide}`);
+            if (activeSlide) {
+                const notes = activeSlide.getAttribute('data-notes') || 'No speaker notes for this slide.';
+                document.getElementById('notesBody').textContent = notes;
+                document.getElementById('notesSlideNumber').textContent = currentSlide;
             }
+        }
+
+        function jumpToSlide(n) {
+            currentSlide = n;
+            updateSlideUI();
         }
 
         function nextSlide() {
             if (currentSlide < totalSlides) {
                 currentSlide++;
-                updateSlide();
+                updateSlideUI();
             }
         }
 
         function prevSlide() {
             if (currentSlide > 1) {
                 currentSlide--;
-                updateSlide();
+                updateSlideUI();
             }
         }
 
-        function goToSlide(n) {
-            currentSlide = n;
-            updateSlide();
+        function toggleNotesDrawer() {
+            const drawer = document.getElementById('notesDrawer');
+            drawer.classList.toggle('open');
         }
 
-        function toggleNotes() {
-            const panel = document.getElementById('notesPanel');
-            panel.classList.toggle('visible');
-        }
-
-        function toggleFullScreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.log(`Fullscreen error: ${err.message}`);
-                });
+        function togglePresentationMode() {
+            document.body.classList.toggle('fullscreen-mode');
+            if (document.body.classList.contains('fullscreen-mode')) {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(() => {});
+                }
             } else {
                 if (document.exitFullscreen) {
-                    document.exitFullscreen();
+                    document.exitFullscreen().catch(() => {});
                 }
             }
-        }
-
-        // Initialize Indicator Dots
-        const indicatorsContainer = document.getElementById('indicators');
-        for (let i = 1; i <= totalSlides; i++) {
-            const dot = document.createElement('div');
-            dot.className = `indicator-dot ${i === 1 ? 'active' : ''}`;
-            dot.title = `Go to Slide ${i}`;
-            dot.onclick = () => goToSlide(i);
-            indicatorsContainer.appendChild(dot);
         }
 
         // Keyboard navigation
@@ -879,14 +1107,17 @@
                 e.preventDefault();
                 prevSlide();
             } else if (e.key === 'n' || e.key === 'N') {
-                toggleNotes();
-            } else if (e.key === 'f' || e.key === 'F') {
-                toggleFullScreen();
+                toggleNotesDrawer();
+            } else if (e.key === 'f' || e.key === 'F' || e.key === 'F5') {
+                e.preventDefault();
+                togglePresentationMode();
+            } else if (e.key === 'Escape') {
+                document.body.classList.remove('fullscreen-mode');
             }
         });
 
-        // Initial setup
-        updateSlide();
+        // Initialize on load
+        updateSlideUI();
     </script>
 </body>
 </html>

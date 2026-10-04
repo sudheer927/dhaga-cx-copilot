@@ -34,49 +34,65 @@ CUSTOM_CSS = """
     
     /* CRITICAL VISIBILITY FIXES FOR DARK THEME BUTTONS */
     .stButton > button {
-        background-color: #1E293B !important;
-        color: #FFFFFF !important;
-        border: 1px solid #475569 !important;
-        border-radius: 8px !important;
+        background-color: #131E30 !important;
+        color: #F1F5F9 !important;
+        border: 1px solid #334155 !important;
+        border-radius: 10px !important;
         font-weight: 600 !important;
-        padding: 8px 16px !important;
+        padding: 10px 16px !important;
         font-size: 0.88rem !important;
         box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
         transition: all 0.2s ease !important;
         text-align: left !important;
         white-space: pre-wrap !important;
         height: auto !important;
+        line-height: 1.45 !important;
     }
     .stButton > button:hover {
-        background-color: #2563EB !important;
+        background-color: #1E293B !important;
         color: #FFFFFF !important;
-        border-color: #60A5FA !important;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4) !important;
+        border-color: #38BDF8 !important;
+        box-shadow: 0 4px 14px rgba(56, 189, 248, 0.25) !important;
         transform: translateY(-1px) !important;
     }
     .stButton > button[kind="primary"] {
-        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+        background: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%) !important;
         color: #FFFFFF !important;
         border: 1px solid #60A5FA !important;
         font-weight: 700 !important;
+        box-shadow: 0 0 16px rgba(37, 99, 235, 0.5) !important;
     }
     .stButton > button[kind="primary"]:hover {
-        background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
+        background: linear-gradient(135deg, #1D4ED8 0%, #1E3A8A 100%) !important;
         color: #FFFFFF !important;
     }
 
-    /* Form Fields & Text Area Contrast */
+    /* CRITICAL CONTRAST FIX FOR FORM FIELDS & DISABLED TEXTAREAS (Delivered message) */
     .stTextArea textarea {
         background-color: #111827 !important;
         color: #F9FAFB !important;
         border: 1px solid #374151 !important;
         border-radius: 8px !important;
-        font-size: 0.9rem !important;
+        font-size: 0.92rem !important;
         line-height: 1.5 !important;
     }
     .stTextArea textarea:focus {
-        border-color: #6366F1 !important;
-        box-shadow: 0 0 0 1px #6366F1 !important;
+        border-color: #38BDF8 !important;
+        box-shadow: 0 0 0 1px #38BDF8 !important;
+    }
+    .stTextArea textarea:disabled,
+    .stTextArea textarea[disabled],
+    div[data-baseweb="textarea"] textarea:disabled {
+        background-color: #141E2F !important;
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        opacity: 1 !important;
+        border: 1.5px solid #38BDF8 !important;
+        font-weight: 600 !important;
+        font-size: 0.94rem !important;
+        line-height: 1.55 !important;
+        box-shadow: 0 0 14px rgba(56, 189, 248, 0.2) !important;
+        cursor: text !important;
     }
     .stTextInput input {
         background-color: #111827 !important;
@@ -745,12 +761,28 @@ def render_agent_workbench(tickets):
                 else:
                     st.success("✅ **Automated Response Dispatched Successfully** (Published Safe Unread via WhatsApp/Freshdesk)")
                 
-                st.text_area("Message Delivered to Customer:", value=sel.get('final_response_sent') or sel.get('generated_draft'), height=110, disabled=True, key=f"delivered_{curr_t_id}")
+                msg_content = sel.get('final_response_sent') or sel.get('generated_draft') or ""
+                st.markdown(f"""
+                <div style="background: #101B2B; border: 1.5px solid #0284C7; border-radius: 8px; padding: 14px 16px; margin: 8px 0 10px 0; box-shadow: 0 4px 14px rgba(0,0,0,0.4);">
+                    <div style="font-size: 0.76rem; font-weight: 700; color: #38BDF8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                        <span>✉️ Message Delivered to Customer:</span>
+                    </div>
+                    <div style="color: #FFFFFF; font-size: 0.93rem; line-height: 1.6; font-weight: 500; white-space: pre-wrap;">{msg_content}</div>
+                </div>
+                """, unsafe_allow_html=True)
                 st.caption(f"⚡ Delivered in 18 seconds | Cost: ₹{sel.get('cost_inr') or 0.096} | Zero Agent Labor")
             
             elif sel.get('ticket_status') == 'AGENT_RESOLVED':
                 st.info("✓ **Ticket Resolved by Agent**")
-                st.text_area("Final Message Sent:", value=sel.get('final_response_sent') or sel.get('generated_draft'), height=100, disabled=True, key=f"resolved_{curr_t_id}")
+                msg_content = sel.get('final_response_sent') or sel.get('generated_draft') or ""
+                st.markdown(f"""
+                <div style="background: #101B2B; border: 1.5px solid #10B981; border-radius: 8px; padding: 14px 16px; margin: 8px 0 10px 0; box-shadow: 0 4px 14px rgba(0,0,0,0.4);">
+                    <div style="font-size: 0.76rem; font-weight: 700; color: #34D399; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                        <span>✉️ Final Message Sent by Agent:</span>
+                    </div>
+                    <div style="color: #FFFFFF; font-size: 0.93rem; line-height: 1.6; font-weight: 500; white-space: pre-wrap;">{msg_content}</div>
+                </div>
+                """, unsafe_allow_html=True)
                 
             elif sel.get('ticket_status') == 'ESCALATED':
                 st.error("🚨 **P1 Escalated to Senior CX Lead (Arpita)**")
@@ -1095,192 +1127,59 @@ def render_technical_architecture(tickets):
 
 
 def render_pitch_deck(tickets):
-    st.markdown("""
-    <div class="pitch-card">
-        <span class="pitch-tag">Mini Project 1 · Pattern-Based AI Workflow</span>
-        <div class="pitch-title">Dhaga & Co. CX Copilot & Autonomous Triage MVP</div>
-        <div class="pitch-lead">
-            Eliminating Dhaga & Co.'s 9-hour response time on 9,000 weekly tickets by uniting 
-            <strong>Google Gemini LLMs (for language)</strong> with <strong>Deterministic Python & Postgres (for ground truth)</strong>.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Action Header
+    p_col1, p_col2 = st.columns([7, 3])
+    with p_col1:
+        st.markdown("### 📽️ Dhaga & Co. CX Copilot — Executive Pitch Deck")
+        st.caption("Authentic 16:9 Widescreen slide deck. Navigate via the thumbnail strip on the left, arrow keys, or controls below.")
+    with p_col2:
+        st.link_button("⛶ Open Fullscreen Deck (/presentation)", "/presentation", type="primary", use_container_width=True)
 
-    slide_tabs = st.tabs([
-        "1. 🚨 The CX Crisis",
-        "2. ⚙️ Code vs. Model Architecture",
-        "3. 💰 CTO Dev's Cost Arithmetic",
-        "4. ⚠️ The Unexpected Failure Defense",
-        "5. 🚀 Live Demo Launchpad"
-    ])
+    # Embed the authentic 16:9 PowerPoint slide engine
+    html_path = os.path.join(os.path.dirname(__file__), "presentation", "index.html")
+    if os.path.exists(html_path):
+        with open(html_path, "r", encoding="utf-8") as f:
+            ppt_html = f.read()
+        st.components.v1.html(ppt_html, height=870, scrolling=False)
+    else:
+        st.error("Presentation file not found at presentation/index.html")
 
-    with slide_tabs[0]:
-        st.markdown("### Slide 1: The Problem in the Client's Language")
-        st.markdown("""
-        > *"Fifty-eight percent of tickets are some version of 'where is my order'. My agents copy and paste the same four replies all day. Average first response is nine hours."*  
-        > — **Arpita, Head of Customer Experience (CX)**
-        """)
+    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+    st.markdown("### 🎯 Presentation Live Demo Launchpad")
+    st.caption("Click any scenario below to automatically load the corresponding ticket into the live triage workbench or WhatsApp simulator during your presentation:")
+    
+    d_col1, d_col2 = st.columns(2)
+    with d_col1:
+        if st.button("⚡ Test 1: Happy-path WISMO in Transit (Delhivery)", use_container_width=True):
+            st.session_state["selected_ticket_id"] = "TCK-1001"
+            st.toast("Loaded TCK-1001! Check Agent Workbench.", icon="📦")
+        st.caption("Pooja Sharma · In Transit to Patna Hub · Auto-dispatched in 18s")
 
-        s1_c1, s1_c2, s1_c3, s1_c4 = st.columns(4)
-        with s1_c1:
-            st.markdown("""
-            <div class="pitch-stat-box">
-                <div class="pitch-stat-num">9,000</div>
-                <div class="pitch-stat-lbl">Inbound Tickets / Wk</div>
-            </div>
-            """, unsafe_allow_html=True)
-        with s1_c2:
-            st.markdown("""
-            <div class="pitch-stat-box">
-                <div class="pitch-stat-num" style="color:#EF4444;">58%</div>
-                <div class="pitch-stat-lbl">Repetitive WISMO (~5,220/wk)</div>
-            </div>
-            """, unsafe_allow_html=True)
-        with s1_c3:
-            st.markdown("""
-            <div class="pitch-stat-box">
-                <div class="pitch-stat-num" style="color:#F59E0B;">9.0 Hrs</div>
-                <div class="pitch-stat-lbl">Average Response Time</div>
-            </div>
-            """, unsafe_allow_html=True)
-        with s1_c4:
-            st.markdown("""
-            <div class="pitch-stat-box">
-                <div class="pitch-stat-num" style="color:#C084FC;">~20 FTE</div>
-                <div class="pitch-stat-lbl">Wasted Labor (₹60L/year)</div>
-            </div>
-            """, unsafe_allow_html=True)
+        if st.button("⚡ Test 2: Delayed Transit WISMO (COD Remorse Risk)", use_container_width=True):
+            st.session_state["selected_ticket_id"] = "TCK-1002"
+            st.toast("Loaded TCK-1002! Check Agent Workbench.", icon="🚚")
+        st.caption("Ankit Verma · Processing delayed · Reassuring EDD dispatched")
 
-        st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
-        st.markdown("#### The Downstream Business Costs:")
-        st.markdown("""
-        * **Faizan (Head of Supply Chain):** 26% Return-to-Origin (RTO) on Cash-on-Delivery orders costs ₹120 per shipment in burned logistics. A 9-hour blackout directly triggers customer remorse and doorstep parcel rejections.
-        * **Neha (Head of Merchandising):** 44% of garment returns land in an untagged 'Other' free-text box. Zero visibility into fit defects across sizing and fabric suppliers.
-        * **Dev (CTO):** 16 developers, 0 ML engineers. Demands deterministic safety, pure Python maintenance, and strict token arithmetic.
-        """)
+        if st.button("⚡ Test 3: Valid Return within 7 Days (Fit Issue)", use_container_width=True):
+            st.session_state["selected_ticket_id"] = "TCK-1003"
+            st.toast("Loaded TCK-1003! Check Agent Workbench.", icon="👗")
+        st.caption("Rituja Patil · Delivered 2 days ago · Agent 1-click approval")
 
-    with slide_tabs[1]:
-        st.markdown("### Slide 2: Architectural Thesis — Code vs. Model")
-        st.info("💡 **Golden Rule:** *A model earns its place on language, not lookup.*")
-        
-        st.markdown("""
-        ```mermaid
-        graph TD
-            Inbound[Customer Message in Hinglish] --> R[Pattern 1: Router & Extractor - Model A Flash]
-            R -->|Intent + Extracted ID| DB[Pattern 2: Deterministic Python SQL & Date Math]
-            DB -->|Verified Order Facts + Policy Code| D[Pattern 3: Prompt-Chained Drafter - Model A Flash]
-            D -->|Generated Hinglish Draft| E[Pattern 4: Evaluator-Optimizer Gate - Model B Pro]
-            E -->|Truthfulness Verified >= 0.95| AD[AUTO_DISPATCH: Sent Unread in 18s]
-            E -->|Return / Discretion / Ambiguous| AR[AGENT_REVIEW: 1-Click Approve in Workbench]
-            E -->|Hostile Abuse / Legal Threat| SE[SUPERVISOR_ESCALATE: P1 to Arpita]
-        ```
-        """)
-        
-        st.markdown("#### Why Monolithic Prompts Fail & Why This 4-Stage Pattern Wins:")
-        st.markdown("""
-        1. **Router & Extractor (Gemini 2.5 Flash @ 0.1):** Normalizes messy Hinglish ("kab aayega", "size tight ho gaya") into structured schema.
-        2. **Deterministic DB Policy (Pure Python):** Queries the 11M-row Postgres order table and calculates `(today - delivered_date).days`. Zero hallucination risk.
-        3. **Context-Injected Drafter (Gemini 2.5 Flash @ 0.4):** Injects live AWB and EDD facts into empathetic brand Hinglish.
-        4. **Evaluator Gate (Gemini 2.5 Pro @ 0.0):** Audits draft against DB facts. Strictly prevents unauthorized refund promises before unread auto-dispatch.
-        """)
+    with d_col2:
+        if st.button("⚡ Test 4: Strict Out-of-Policy Rejection (>7 Days)", use_container_width=True):
+            st.session_state["selected_ticket_id"] = "TCK-1008"
+            st.toast("Loaded TCK-1008! Check Agent Workbench.", icon="⛔")
+        st.caption("Neha Reddy · Delivered 16 days ago · Automated polite refusal")
 
-    with slide_tabs[2]:
-        st.markdown("### Slide 3: Dev's CTO Financial Defense (The Arithmetic)")
-        st.markdown("Dhaga & Co. receives **9,000 support tickets a week** (approx. 39,000/month).")
-        
-        calc_c1, calc_c2 = st.columns(2)
-        with calc_c1:
-            st.markdown("#### Token Breakdown per Ticket Run:")
-            st.markdown("""
-            * **Router (Model A - Flash):** 380 input tokens, 85 output tokens
-            * **Drafter (Model A - Flash):** 450 input tokens, 130 output tokens
-            * **Evaluator (Model B - Pro):** 520 input tokens, 60 output tokens
-            * **Blended Cost per Run:** **₹0.096 per ticket** ($0.0011)
-            """)
-        with calc_c2:
-            st.markdown("#### Headcount & Operational ROI:")
-            st.markdown("""
-            * **Weekly LLM Cost (9k tickets):** **₹864 / week** (~$10 USD)
-            * **Monthly LLM Cost (39k tickets):** **₹3,744 / month**
-            * **Manual Labor Reclaimed:** 20 FTEs = **₹5,00,000 / month**
-            * **Net Monthly Savings:** **₹4,96,256 / month**
-            * **ROI Multiplier:** **133x Return on AI Spend**
-            """)
+        if st.button("⚡ Test 5: Intentional Failure (Ambiguous Phone Collision)", use_container_width=True):
+            st.session_state["selected_ticket_id"] = "TCK-1007"
+            st.toast("Loaded TCK-1007! Check Agent Workbench.", icon="⚠️")
+        st.caption("Simran Kaur · 2 active orders · Refuses to guess; flags agent")
 
-        st.success("🛡️ **Zero ML Infrastructure Burden:** Runs on clean pure Python + SQLite/Postgres. No vector databases, no fine-tuning, no custom embeddings to maintain on Monday morning.")
-
-    with slide_tabs[3]:
-        st.markdown("### Slide 4: What Broke That We Did Not Expect")
-        st.markdown("#### The Unexpected Failure: Phone Number Collision in WhatsApp Messages")
-        
-        col_fail, col_fix = st.columns(2)
-        with col_fail:
-            st.markdown("""
-            <div style="background: #1F1919; border: 1px solid #7F1D1D; border-radius: 10px; padding: 16px;">
-                <h5 style="color: #F87171; margin-top:0;">How It Broke:</h5>
-                <p style="font-size:0.85rem; color:#D1D5DB;">
-                During testing with real WhatsApp messages, over <strong>35% of Tier-2/3 customers never provided an Order ID</strong> (e.g. <em>"Mera parcel nahi aaya refund do"</em>).
-                </p>
-                <p style="font-size:0.85rem; color:#D1D5DB;">
-                Repeat buyers frequently had <strong>two active concurrent orders</strong> in Postgres (e.g. a Kurti shipped yesterday and Kidswear processing today).
-                Early single prompts forced the LLM to pick the 'most relevant' order. The model guessed wrong 50% of the time, creating customer outrage!
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with col_fix:
-            st.markdown("""
-            <div style="background: #064E3B; border: 1px solid #059669; border-radius: 10px; padding: 16px;">
-                <h5 style="color: #34D399; margin-top:0;">The Intentional Failure Safeguard:</h5>
-                <p style="font-size:0.85rem; color:#D1D5DB;">
-                We implemented an explicit database collision check in deterministic Python (<code>lookup_order_details</code>).
-                </p>
-                <p style="font-size:0.85rem; color:#D1D5DB;">
-                If customer phone returns &gt; 1 active orders and no specific ID is in the text:
-                <br>1. System emits <code>AMBIGUOUS_ORDER_REFERENCE</code>.
-                <br>2. Strictly blocks automated dispatch.
-                <br>3. Automatically formats a clarifying response in Hinglish listing candidates.
-                <br>4. Flags the ticket in agent workbench with a visible warning pill.
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-
-    with slide_tabs[4]:
-        st.markdown("### Slide 5: Live Interactive Demo Launchpad")
-        st.markdown("Click any scenario below to automatically load and inspect it live during your presentation:")
-        
-        d_col1, d_col2 = st.columns(2)
-        with d_col1:
-            if st.button("⚡ Test 1: Happy-path WISMO in Transit (Delhivery)", use_container_width=True):
-                st.session_state["selected_ticket_id"] = "TCK-1001"
-                st.toast("Loaded TCK-1001! Check Agent Workbench.", icon="📦")
-            st.caption("Pooja Sharma · In Transit to Patna Hub · Auto-dispatched in 18s")
-
-            if st.button("⚡ Test 2: Delayed Transit WISMO (COD Remorse Risk)", use_container_width=True):
-                st.session_state["selected_ticket_id"] = "TCK-1002"
-                st.toast("Loaded TCK-1002! Check Agent Workbench.", icon="🚚")
-            st.caption("Ankit Verma · Processing delayed · Reassuring EDD dispatched")
-
-            if st.button("⚡ Test 3: Valid Return within 7 Days (Fit Issue)", use_container_width=True):
-                st.session_state["selected_ticket_id"] = "TCK-1003"
-                st.toast("Loaded TCK-1003! Check Agent Workbench.", icon="👗")
-            st.caption("Rituja Patil · Delivered 2 days ago · Agent 1-click approval")
-
-        with d_col2:
-            if st.button("⚡ Test 4: Strict Out-of-Policy Rejection (>7 Days)", use_container_width=True):
-                st.session_state["selected_ticket_id"] = "TCK-1008"
-                st.toast("Loaded TCK-1008! Check Agent Workbench.", icon="⛔")
-            st.caption("Neha Reddy · Delivered 16 days ago · Automated polite refusal")
-
-            if st.button("⚡ Test 5: Intentional Failure (Ambiguous Phone Collision)", use_container_width=True):
-                st.session_state["selected_ticket_id"] = "TCK-1007"
-                st.toast("Loaded TCK-1007! Check Agent Workbench.", icon="⚠️")
-            st.caption("Simran Kaur · 2 active orders · Refuses to guess; flags agent")
-
-            if st.button("⚡ Test 6: Hostile Customer Escalation (P1 to Arpita)", use_container_width=True):
-                st.session_state["selected_ticket_id"] = "TCK-1006"
-                st.toast("Loaded TCK-1006! Check Agent Workbench.", icon="🚨")
-            st.caption("Kavita Yadav · Delivery attempt dispute · AI auto-reply blocked")
+        if st.button("⚡ Test 6: Hostile Customer Escalation (P1 to Arpita)", use_container_width=True):
+            st.session_state["selected_ticket_id"] = "TCK-1006"
+            st.toast("Loaded TCK-1006! Check Agent Workbench.", icon="🚨")
+        st.caption("Kavita Yadav · Delivery attempt dispute · AI auto-reply blocked")
 
 
 # ==============================================================================
