@@ -430,7 +430,10 @@ with st.sidebar:
     st.divider()
     st.markdown("**Presentation & Demo Controls:**")
     
-    st.link_button("📽️ Open Fullscreen Slides (/presentation)", "/presentation", use_container_width=True, help="Opens the interactive presentation slide deck webpage")
+    if st.button("📽️ Launch Presentation Mode", use_container_width=True, type="primary"):
+        st.session_state["user_role_choice"] = "📽️ Executive Pitch & Presentation Deck"
+        st.session_state["deck_fullscreen"] = True
+        st.rerun()
 
     if st.button("⚠️ Trigger Intentional Failure Demo", use_container_width=True, help="Loads Ticket TCK-1007 (Ambiguous Order without ID)"):
         st.session_state["selected_ticket_id"] = "TCK-1007"
@@ -454,6 +457,91 @@ escalated = sum(1 for t in tickets if t.get('ticket_status') == 'ESCALATED')
 total_cost_inr = sum(float(t.get('cost_inr') or 0.0) for t in tickets)
 avg_cost_inr = (total_cost_inr / total_tickets) if total_tickets > 0 else 0.096
 auto_pct = int((auto_dispatched / total_tickets * 100)) if total_tickets > 0 else 72
+
+# ==============================================================================
+# DEDICATED PURE FULLSCREEN PRESENTATION MODE (EDGE-TO-EDGE, NO CLUTTER)
+# ==============================================================================
+is_deck_fs = st.session_state.get("deck_fullscreen", False)
+if is_deck_fs:
+    top_c1, top_c2, top_c3 = st.columns([2.5, 5, 2.5])
+    with top_c1:
+        if st.button("✕ Exit Fullscreen Deck", key="exit_fs_top", type="secondary", use_container_width=True):
+            st.session_state["deck_fullscreen"] = False
+            st.rerun()
+    with top_c2:
+        st.markdown(
+            "<div style='text-align:center; padding-top:6px; font-weight:700; color:#38BDF8; font-size:1.05rem; letter-spacing:0.02em;'>"
+            "📽️ Dhaga & Co. CX Copilot — Executive Pitch Deck"
+            "</div>", 
+            unsafe_allow_html=True
+        )
+    with top_c3:
+        st.markdown(
+            "<div style='text-align:right; padding-top:8px; font-size:0.75rem; color:#94A3B8;'>"
+            "💡 Press <kbd style='background:#1E293B; color:#38BDF8; padding:2px 6px; border-radius:4px;'>F5</kbd> for native full-screen"
+            "</div>",
+            unsafe_allow_html=True
+        )
+
+    # Embed the presentation filling the screen right from the top!
+    html_path = os.path.join(os.path.dirname(__file__), "presentation", "index.html")
+    if os.path.exists(html_path):
+        with open(html_path, "r", encoding="utf-8") as f:
+            ppt_html = f.read()
+        st.components.v1.html(ppt_html, height=890, scrolling=False)
+    else:
+        st.error("Presentation file not found at presentation/index.html")
+
+    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
+    st.markdown("### 🎯 Presentation Live Demo Launchpad")
+    st.caption("Click any scenario below to automatically load the ticket into the live triage workbench or WhatsApp simulator during your presentation:")
+    
+    d_col1, d_col2 = st.columns(2)
+    with d_col1:
+        if st.button("⚡ Test 1: Happy-path WISMO in Transit (Delhivery)", use_container_width=True, key="fs_t1"):
+            st.session_state["selected_ticket_id"] = "TCK-1001"
+            st.session_state["deck_fullscreen"] = False
+            st.session_state["user_role_choice"] = "🎧 Frontline Support Agent"
+            st.rerun()
+        st.caption("Pooja Sharma · In Transit to Patna Hub · Auto-dispatched in 18s")
+
+        if st.button("⚡ Test 2: Delayed Transit WISMO (COD Remorse Risk)", use_container_width=True, key="fs_t2"):
+            st.session_state["selected_ticket_id"] = "TCK-1002"
+            st.session_state["deck_fullscreen"] = False
+            st.session_state["user_role_choice"] = "🎧 Frontline Support Agent"
+            st.rerun()
+        st.caption("Ankit Verma · Processing delayed · Reassuring EDD dispatched")
+
+        if st.button("⚡ Test 3: Valid Return within 7 Days (Fit Issue)", use_container_width=True, key="fs_t3"):
+            st.session_state["selected_ticket_id"] = "TCK-1003"
+            st.session_state["deck_fullscreen"] = False
+            st.session_state["user_role_choice"] = "🎧 Frontline Support Agent"
+            st.rerun()
+        st.caption("Rituja Patil · Delivered 2 days ago · Agent 1-click approval")
+
+    with d_col2:
+        if st.button("⚡ Test 4: Strict Out-of-Policy Rejection (>7 Days)", use_container_width=True, key="fs_t4"):
+            st.session_state["selected_ticket_id"] = "TCK-1008"
+            st.session_state["deck_fullscreen"] = False
+            st.session_state["user_role_choice"] = "🎧 Frontline Support Agent"
+            st.rerun()
+        st.caption("Neha Reddy · Delivered 16 days ago · Automated polite refusal")
+
+        if st.button("⚡ Test 5: Intentional Failure (Ambiguous Phone Collision)", use_container_width=True, key="fs_t5"):
+            st.session_state["selected_ticket_id"] = "TCK-1007"
+            st.session_state["deck_fullscreen"] = False
+            st.session_state["user_role_choice"] = "🎧 Frontline Support Agent"
+            st.rerun()
+        st.caption("Simran Kaur · 2 active orders · Refuses to guess; flags agent")
+
+        if st.button("⚡ Test 6: Hostile Customer Escalation (P1 to Arpita)", use_container_width=True, key="fs_t6"):
+            st.session_state["selected_ticket_id"] = "TCK-1006"
+            st.session_state["deck_fullscreen"] = False
+            st.session_state["user_role_choice"] = "📊 Arpita (Head of CX)"
+            st.rerun()
+        st.caption("Kavita Yadav · Delivery attempt dispute · AI auto-reply blocked")
+
+    st.stop() # Prevents rendering of the rest of dashboard when in fullscreen presentation!
 
 if "Frontline Support Agent" in user_role:
     st.markdown("## 🎧 Frontline Agent Copilot & Triage Workbench")
